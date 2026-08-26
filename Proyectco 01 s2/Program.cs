@@ -222,6 +222,9 @@ namespace Proyectco_01_s2
             public virtual void CalcularTarifa (double Peso, double Valor)
             { // no vrg
             }
+
+           
+            
         }
 
         class Documento : Paquete
@@ -234,6 +237,8 @@ namespace Proyectco_01_s2
             public override void CalcularTarifa(double Peso, double Valor)
             { // no vrg
             }
+           
+
         }
 
         class Estandar : Paquete
@@ -261,7 +266,115 @@ namespace Proyectco_01_s2
         }
 
         class Vehiculo
-        { 
+        {
+            private string  placa;
+
+            public string  Placa
+            {
+                get { return placa; }
+                set { placa = value; }
+            }
+
+            private string  marca;
+
+            public string  Marca
+            {
+                get { return marca; }
+                set { marca = value; }
+            }
+
+            private string modelo;
+
+            public string Modelo
+            {
+                get { return modelo; }
+                set { modelo = value; }
+            }
+
+            private double  capacidadCarga;
+
+            public double  CapacidadCarga
+            {
+                get { return capacidadCarga; }
+                set { capacidadCarga = value; }
+            }
+
+           public enum estadoVehiculo
+            {Disponible, Asignado, Mantenimiento }
+
+            private estadoVehiculo estado;
+
+            public estadoVehiculo Estado
+            {
+                get { return estado; }
+                set { estado = value; }
+            }
+
+            private double costo;
+
+            public double Costo
+            {
+                get { return costo; }
+                set { costo = value; }
+            }
+
+            public virtual void MostrarInformacion()
+            {
+                Console.WriteLine("Placa: " + Placa);
+                Console.WriteLine("Marca: " + Marca);
+                Console.WriteLine("Modelo: " + Modelo);
+                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
+                Console.WriteLine("Estado: " + Estado);
+                Console.WriteLine("Costo: " + Costo);
+            }
+
+            public virtual void CalcularPrecio()
+            { }
+        }
+        
+        class Bicicleta : Vehiculo
+        {
+            public override void MostrarInformacion()
+            {
+                Console.WriteLine("Placa: " + Placa);
+                Console.WriteLine("Marca: " + Marca);
+                Console.WriteLine("Modelo: " + Modelo);
+                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
+                Console.WriteLine("Estado: " + Estado);
+                Console.WriteLine("Costo: " + Costo);
+            }
+            public override void CalcularPrecio()
+            { }
+        }
+
+        class Motocicleta : Vehiculo
+        {
+            public override void MostrarInformacion()
+            {
+                Console.WriteLine("Placa: " + Placa);
+                Console.WriteLine("Marca: " + Marca);
+                Console.WriteLine("Modelo: " + Modelo);
+                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
+                Console.WriteLine("Estado: " + Estado);
+                Console.WriteLine("Costo: " + Costo);
+            }
+            public override void CalcularPrecio()
+            { }
+        }
+
+        class Automovil : Vehiculo
+        {
+            public override void MostrarInformacion()
+            {
+                Console.WriteLine("Placa: " + Placa);
+                Console.WriteLine("Marca: " + Marca);
+                Console.WriteLine("Modelo: " + Modelo);
+                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
+                Console.WriteLine("Estado: " + Estado);
+                Console.WriteLine("Costo: " + Costo);
+            }
+            public override void CalcularPrecio()
+            { }
         }
 
         static void Main(string[] args)
