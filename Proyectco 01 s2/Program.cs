@@ -8,6 +8,153 @@ namespace Proyectco_01_s2
 {
     internal class Program
     {
+        class Persona
+        {
+            private int codigo;
+
+            public int Codigo
+            {
+                get { return codigo; }
+                set { codigo = value; }
+            }
+
+            private string nombre;
+
+            public string Nombre
+            {
+                get { return nombre; }
+                set { nombre = value; }
+            }
+
+            private string numeroTelefono;
+
+            public string NumeroTelefono
+            {
+                get { return numeroTelefono; }
+                set { numeroTelefono = value; }
+            }
+
+            public virtual void MostrarInformacion()
+            {
+                Console.WriteLine("Código: " + Codigo);
+                Console.WriteLine("Nombre: " + Nombre);
+                Console.WriteLine("Número de Teléfono: " + NumeroTelefono);
+            }
+
+            public Persona(int codigo, string nombre, string numeroTelefono)
+            {
+                Codigo = codigo;
+                Nombre = nombre;
+                NumeroTelefono = numeroTelefono;
+            }
+
+        }
+
+        class Cliente : Persona
+        {
+            private string correoElectronico;
+
+            public string CorreoElectronico
+            {
+                get { return correoElectronico; }
+                set { correoElectronico = value; }
+            }
+
+            private string direccion;
+
+            public string Direccion
+            {
+                get { return direccion; }
+                set { direccion = value; }
+            }
+
+            private int cantidadPersonas;
+
+            public int CantidadPersonas
+            {
+                get { return cantidadPersonas; }
+                set { cantidadPersonas = value; }
+            }
+
+           
+            public override void MostrarInformacion()
+            {
+                Console.WriteLine("Código: " + Codigo);
+                Console.WriteLine("Nombre: " + Nombre);
+                Console.WriteLine("Número de Teléfono: " + NumeroTelefono);
+                Console.WriteLine("Correo Electrónico: " + CorreoElectronico);
+                Console.WriteLine("Dirección: " + Direccion);
+                Console.WriteLine("Cantidad de Personas: " + CantidadPersonas);
+            }
+
+            public Cliente(int codigo, string nombre, string numeroTelefono, string correoElectronico, string direccion, int cantidadPersonas)
+               : base(codigo, nombre, numeroTelefono)
+            {
+                CorreoElectronico = correoElectronico;
+                Direccion = direccion;
+                CantidadPersonas = cantidadPersonas;
+            }
+
+        }
+
+        class Repartidor : Persona
+        {
+            private char tipoLicencia;
+
+            public char TipoLicencia
+            {
+                get { return tipoLicencia; }
+                set { tipoLicencia = value; }
+            }
+
+            private bool disponibilidad;
+
+            public bool Disponibilidad
+            {
+                get { return disponibilidad; }
+                set { disponibilidad = value; }
+            }
+
+            private int cantidadEntregas;
+
+            public int CantidadEntregas
+            {
+                get { return cantidadEntregas; }
+                set { cantidadEntregas = value; }
+            }
+
+            private double calificacion;
+
+            public double Calificacion
+            {
+                get { return calificacion; }
+                set { calificacion = value; }
+            }
+
+            public override void MostrarInformacion()
+            {
+                Console.WriteLine("Código: " + Codigo);
+                Console.WriteLine("Nombre: " + Nombre);
+                Console.WriteLine("Número de Teléfono: " + NumeroTelefono);
+                Console.WriteLine("Tipo de Licencia: " + TipoLicencia);
+                Console.WriteLine("Cantidad de Entregas: " + CantidadEntregas);
+                Console.WriteLine("Calificación: " + Calificacion);
+            }
+
+            public Repartidor(int codigo, string nombre, string numeroTelefono, char tipoLicencia, bool disponibilidad, int cantidadEntregas, double calificacion)
+                : base(codigo, nombre, numeroTelefono)
+            {
+                TipoLicencia = tipoLicencia;
+                Disponibilidad = disponibilidad;
+                CantidadEntregas = cantidadEntregas;
+                Calificacion = calificacion;
+            }
+        }
+
+
+
+
+
         static void Main(string[] args)
         {
         }
