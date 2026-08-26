@@ -213,17 +213,56 @@ namespace Proyectco_01_s2
                 set { direccionDestino = value; }
             }
 
-            public void CalcularDistancia(string Origen, string Destino)
+            public virtual void CalcularDistancia(string Origen, string Destino)
             {
                 // no sabemos ni vrga
             
             }
 
-            public void CalcularTarifa (double Peso, double Valor)
-            { // no vrg}
+            public virtual void CalcularTarifa (double Peso, double Valor)
+            { // no vrg
+            }
         }
 
+        class Documento : Paquete
+        {
+            public override void CalcularDistancia(string Origen, string Destino)
+            {
+                // no sabemos ni vrga
 
+            }
+            public override void CalcularTarifa(double Peso, double Valor)
+            { // no vrg
+            }
+        }
+
+        class Estandar : Paquete
+        {
+            public override void CalcularDistancia(string Origen, string Destino)
+            {
+                // no sabemos ni vrga
+
+            }
+            public override void CalcularTarifa(double Peso, double Valor)
+            { // no vrg
+            }
+        }
+
+        class Fragil : Paquete
+        {
+            public override void CalcularDistancia(string Origen, string Destino)
+            {
+                // no sabemos ni vrga
+
+            }
+            public override void CalcularTarifa(double Peso, double Valor)
+            { // no vrg
+            }
+        }
+
+        class Vehiculo
+        { 
+        }
 
         static void Main(string[] args)
         {
