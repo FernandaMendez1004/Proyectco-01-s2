@@ -151,7 +151,77 @@ namespace Proyectco_01_s2
             }
         }
 
+        class Paquete
+        {
+            private int codigo;
 
+            public int Codigo
+            {
+                get { return codigo; }
+                set { codigo = value; }
+            }
+
+            private Cliente propietario;
+
+            
+            public Cliente Propietario
+            {
+                
+                get {
+                    // sepa la bola que hay que hacer hay que arreglar esta mamada
+                    return propietario; }
+                set { propietario = value; }
+            }
+
+            private string descripcion;
+
+            public string Descripcion
+            {
+                get { return descripcion; }
+                set { descripcion = value; }
+            }
+
+            private double peso;
+
+            public double Peso
+            {
+                get { return  peso; }
+                set {  peso = value; }
+            }
+
+            private double valorDeclarado;
+
+            public double ValorDeclarado
+            {
+                get { return  valorDeclarado; }
+                set {  valorDeclarado = value; }
+            }
+
+            private string direccionOrigen;
+
+            public string DireccionOrigen
+            {
+                get { return direccionOrigen; }
+                set { direccionOrigen = value; }
+            }
+
+            private string direccionDestino;
+
+            public string DireccionDestino
+            {
+                get { return direccionDestino; }
+                set { direccionDestino = value; }
+            }
+
+            public void CalcularDistancia(string Origen, string Destino)
+            {
+                // no sabemos ni vrga
+            
+            }
+
+            public void CalcularTarifa (double Peso, double Valor)
+            { // no vrg}
+        }
 
 
 
