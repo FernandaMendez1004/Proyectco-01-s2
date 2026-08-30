@@ -379,6 +379,93 @@ namespace Proyectco_01_s2
 
         static void Main(string[] args)
         {
+            int opcion;
+            void MenuPrincipal()
+            {
+                do
+                {
+                    Console.ResetColor();
+                    Console.BackgroundColor = ConsoleColor.DarkBlue;
+                    Console.WriteLine("========== XelaDriver ==========");
+                    Console.WriteLine();
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("Seleccione una opcion: \n" +
+                        "1. Gestion de Clientes" +
+                        "2. Gestion de Repartidores \n" +
+                        "3. Gestion de Vehiculos \n" +
+                        "4. Gestion de Paquetes \n" +
+                        "5. Gestion de Entregas \n" +
+                        "6. Gestion de Incidencias \n" +
+                        "7. Reportes \n" +
+                        "8. Salir");
+                    if(!int.TryParse(Console.ReadLine(), out opcion))
+                    {
+                        //buscar una forma mas optima de validar los datos
+                        //hay que intentar con excepciones
+                        Console.BackgroundColor= ConsoleColor.DarkRed;
+                        Console.WriteLine("Ingrese su opcion en numeros enteros");
+                    }else { break; }
+                } while (true);
+                switch(opcion)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break; 
+                    case 8:
+                        break;
+                    default:
+                        Console.ResetColor();
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Opcion Invalida");
+                        break;
+                }
+            }
+            void MenuClientes()
+            {
+                do
+                {
+                    Console.ResetColor();
+                    Console.WriteLine("======== Menu clientes ========");
+                    Console.WriteLine();
+                    Console.WriteLine("Seleccione una opcion: \n" +
+                        "1. Registrar nuevo cliente \n" +
+                        "2. Consultar lista de clientes \n" +
+                        "3. Actualizar cliente existente \n" +
+                        "4. Regresar");
+                    if(!int.TryParse(Console.ReadLine(), out opcion))
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Ingrese su opcion en numeros enteros");
+                    }else
+                    {
+                        break;
+                    }
+                } while (true);
+                switch (opcion)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4: MenuPrincipal(); break;
+                    default : Console.ResetColor(); Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine("Opcion invalida"); break;
+                }
+            }
         }
     }
 }

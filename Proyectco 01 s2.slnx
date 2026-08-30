@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="Proyectco 01 s2/Proyectco 01 s2.csproj" Id="b48c2b90-6294-4f00-ac82-1e154cb09c4d" />
+  <Project Path="Proyectco 01 s2/Proyectco 01 s2.csproj" Id="b48c2b90-6294-4f00-ac82-1e154cb09c4d">
+    <BuildType Project="Debug" />
+  </Project>
 </Solution>
