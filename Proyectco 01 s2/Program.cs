@@ -15,7 +15,9 @@ namespace Proyectco_01_s2
             public int Codigo
             {
                 get { return codigo; }
-                set { codigo = value; }
+                set { if (value > 0)
+                    { codigo = value; }
+                }
             }
 
             private string nombre;
@@ -23,7 +25,9 @@ namespace Proyectco_01_s2
             public string Nombre
             {
                 get { return nombre; }
-                set { nombre = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { nombre = value; }
+                }
             }
 
             private string numeroTelefono;
@@ -31,7 +35,9 @@ namespace Proyectco_01_s2
             public string NumeroTelefono
             {
                 get { return numeroTelefono; }
-                set { numeroTelefono = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { numeroTelefono = value; }
+                }
             }
 
             public virtual void MostrarInformacion()
@@ -57,7 +63,9 @@ namespace Proyectco_01_s2
             public string CorreoElectronico
             {
                 get { return correoElectronico; }
-                set { correoElectronico = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { correoElectronico = value; }
+                }
             }
 
             private string direccion;
@@ -65,7 +73,9 @@ namespace Proyectco_01_s2
             public string Direccion
             {
                 get { return direccion; }
-                set { direccion = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { direccion = value; }
+                }
             }
 
             private int cantidadPersonas;
@@ -73,7 +83,9 @@ namespace Proyectco_01_s2
             public int CantidadPersonas
             {
                 get { return cantidadPersonas; }
-                set { cantidadPersonas = value; }
+                set { if (value > 0)
+                    { cantidadPersonas = value; }
+                }
             }
 
            
@@ -120,7 +132,9 @@ namespace Proyectco_01_s2
             public int CantidadEntregas
             {
                 get { return cantidadEntregas; }
-                set { cantidadEntregas = value; }
+                set { if (value >= 0)
+                    { cantidadEntregas = value; }
+                }
             }
 
             private double calificacion;
@@ -128,7 +142,9 @@ namespace Proyectco_01_s2
             public double Calificacion
             {
                 get { return calificacion; }
-                set { calificacion = value; }
+                set { if (value >= 0 && value <= 5)
+                    { calificacion = value; }
+                }
             }
 
             public override void MostrarInformacion()
@@ -158,19 +174,25 @@ namespace Proyectco_01_s2
             public int Codigo
             {
                 get { return codigo; }
-                set { codigo = value; }
+                set { if (value > 0)
+                    { codigo = value; }
+                }
             }
 
             private Cliente propietario;
-
-            
             public Cliente Propietario
             {
-                
-                get {
-                    // sepa la bola que hay que hacer hay que arreglar esta mamada
-                    return propietario; }
-                set { propietario = value; }
+                get
+                {
+                    return propietario;
+                }
+                set
+                {
+                    if (value != null)
+                    {
+                        propietario = value;
+                    }
+                }
             }
 
             private string descripcion;
@@ -178,7 +200,9 @@ namespace Proyectco_01_s2
             public string Descripcion
             {
                 get { return descripcion; }
-                set { descripcion = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { descripcion = value; }
+                }
             }
 
             private double peso;
@@ -186,7 +210,9 @@ namespace Proyectco_01_s2
             public double Peso
             {
                 get { return  peso; }
-                set {  peso = value; }
+                set { if (value > 0)
+                    { peso = value; }
+                }
             }
 
             private double valorDeclarado;
@@ -194,7 +220,9 @@ namespace Proyectco_01_s2
             public double ValorDeclarado
             {
                 get { return  valorDeclarado; }
-                set {  valorDeclarado = value; }
+                set { if (value > 0)
+                    { valorDeclarado = value; }
+                }
             }
 
             private string direccionOrigen;
@@ -202,7 +230,9 @@ namespace Proyectco_01_s2
             public string DireccionOrigen
             {
                 get { return direccionOrigen; }
-                set { direccionOrigen = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { direccionOrigen = value; }
+                }
             }
 
             private string direccionDestino;
@@ -210,7 +240,9 @@ namespace Proyectco_01_s2
             public string DireccionDestino
             {
                 get { return direccionDestino; }
-                set { direccionDestino = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { direccionDestino = value; }
+                }
             }
 
             public virtual void CalcularDistancia(string Origen, string Destino)
@@ -223,27 +255,47 @@ namespace Proyectco_01_s2
             { // no vrg
             }
 
-           
-            
-        }
-
-        class Documento : Paquete
-        {
-            public override void CalcularDistancia(string Origen, string Destino)
+            public Paquete(int codigo, Cliente propietario, string descripcion, double peso, double valorDeclarado, string direccionOrigen, string direccionDestino)
             {
-                // no sabemos ni vrga
-
+                Codigo = codigo;
+                Propietario = propietario;
+                Descripcion = descripcion;
+                Peso = peso;
+                ValorDeclarado = valorDeclarado;
+                DireccionOrigen = direccionOrigen;
+                DireccionDestino = direccionDestino;
             }
-            public override void CalcularTarifa(double Peso, double Valor)
-            { // no vrg
-            }
-           
 
         }
 
+       
+        class Documento : Paquete
+            {
+                public Documento(
+                    int codigo, Cliente propietario, string descripcion, double peso, double valorDeclarado, string direccionOrigen, string direccionDestino)
+                    : base( codigo, propietario, descripcion, peso,  valorDeclarado, direccionOrigen, direccionDestino)
+                {
+                }
+
+                public override void CalcularDistancia(string Origen, string Destino)
+                {
+                }
+
+                public override void CalcularTarifa(double Peso, double Valor)
+                {
+                }
+                         
+            }
+
+                
         class Estandar : Paquete
         {
-            public override void CalcularDistancia(string Origen, string Destino)
+        public Estandar(
+                   int codigo, Cliente propietario, string descripcion, double peso, double valorDeclarado, string direccionOrigen, string direccionDestino)
+                   : base(codigo, propietario, descripcion, peso, valorDeclarado, direccionOrigen, direccionDestino)
+        {
+        }
+        public override void CalcularDistancia(string Origen, string Destino)
             {
                 // no sabemos ni vrga
 
@@ -255,7 +307,12 @@ namespace Proyectco_01_s2
 
         class Fragil : Paquete
         {
-            public override void CalcularDistancia(string Origen, string Destino)
+        public Fragil(
+                    int codigo, Cliente propietario, string descripcion, double peso, double valorDeclarado, string direccionOrigen, string direccionDestino)
+                    : base(codigo, propietario, descripcion, peso, valorDeclarado, direccionOrigen, direccionDestino)
+        {
+        }
+        public override void CalcularDistancia(string Origen, string Destino)
             {
                 // no sabemos ni vrga
 
@@ -272,7 +329,9 @@ namespace Proyectco_01_s2
             public string  Placa
             {
                 get { return placa; }
-                set { placa = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { placa = value; }
+                }
             }
 
             private string  marca;
@@ -280,7 +339,9 @@ namespace Proyectco_01_s2
             public string  Marca
             {
                 get { return marca; }
-                set { marca = value; }
+                set { if (!string.IsNullOrEmpty(value))
+                    { marca = value; }
+                }
             }
 
             private string modelo;
@@ -288,7 +349,10 @@ namespace Proyectco_01_s2
             public string Modelo
             {
                 get { return modelo; }
-                set { modelo = value; }
+                set {
+                    if (!string.IsNullOrEmpty(value))
+                    { modelo = value; }
+                }
             }
 
             private double  capacidadCarga;
@@ -296,7 +360,9 @@ namespace Proyectco_01_s2
             public double  CapacidadCarga
             {
                 get { return capacidadCarga; }
-                set { capacidadCarga = value; }
+                set { if (value > 0)
+                    { capacidadCarga = value; }
+                }
             }
 
            public enum estadoVehiculo
@@ -307,7 +373,9 @@ namespace Proyectco_01_s2
             public estadoVehiculo Estado
             {
                 get { return estado; }
-                set { estado = value; }
+                set { if (Enum.IsDefined(typeof(estadoVehiculo), value))
+                    { estado = value; }
+                }
             }
 
             private double costo;
@@ -315,7 +383,9 @@ namespace Proyectco_01_s2
             public double Costo
             {
                 get { return costo; }
-                set { costo = value; }
+                set { if (value > 0)
+                    { costo = value; }
+                }
             }
 
             public virtual void MostrarInformacion()
@@ -330,50 +400,71 @@ namespace Proyectco_01_s2
 
             public virtual void CalcularPrecio()
             { }
+
+            public Vehiculo(
+     string placa,
+     string marca,
+     string modelo,
+     double capacidadCarga,
+     estadoVehiculo estado,
+     double costo)
+            {
+                Placa = placa;
+                Marca = marca;
+                Modelo = modelo;
+                CapacidadCarga = capacidadCarga;
+                Estado = estado;
+                Costo = costo;
+            }
         }
         
-        class Bicicleta : Vehiculo
-        {
-            public override void MostrarInformacion()
+         class Bicicleta : Vehiculo
             {
-                Console.WriteLine("Placa: " + Placa);
-                Console.WriteLine("Marca: " + Marca);
-                Console.WriteLine("Modelo: " + Modelo);
-                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
-                Console.WriteLine("Estado: " + Estado);
-                Console.WriteLine("Costo: " + Costo);
-            }
-            public override void CalcularPrecio()
-            { }
-        }
+                public Bicicleta(
+                    string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo) 
+                    : base(placa, marca, modelo, capacidadCarga, estado, costo)
+                {
+                }
+
+                public override void MostrarInformacion()
+                {
+                    base.MostrarInformacion();
+                }
+
+                public override void CalcularPrecio()
+                {
+                }
+            }        
 
         class Motocicleta : Vehiculo
         {
-            public override void MostrarInformacion()
-            {
-                Console.WriteLine("Placa: " + Placa);
-                Console.WriteLine("Marca: " + Marca);
-                Console.WriteLine("Modelo: " + Modelo);
-                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
-                Console.WriteLine("Estado: " + Estado);
-                Console.WriteLine("Costo: " + Costo);
-            }
-            public override void CalcularPrecio()
+        public Motocicleta(
+                    string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo)
+                    : base(placa, marca, modelo, capacidadCarga, estado, costo)
+        {
+        }
+
+        public override void MostrarInformacion()
+        {
+            base.MostrarInformacion();
+        }
+        public override void CalcularPrecio()
             { }
         }
 
         class Automovil : Vehiculo
         {
-            public override void MostrarInformacion()
-            {
-                Console.WriteLine("Placa: " + Placa);
-                Console.WriteLine("Marca: " + Marca);
-                Console.WriteLine("Modelo: " + Modelo);
-                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
-                Console.WriteLine("Estado: " + Estado);
-                Console.WriteLine("Costo: " + Costo);
-            }
-            public override void CalcularPrecio()
+        public Automovil(
+                string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo)
+                : base(placa, marca, modelo, capacidadCarga, estado, costo)
+        {
+        }
+
+        public override void MostrarInformacion()
+        {
+            base.MostrarInformacion();
+        }
+        public override void CalcularPrecio()
             { }
         }
 
@@ -386,7 +477,8 @@ namespace Proyectco_01_s2
                 {
                     Console.ResetColor();
                     Console.BackgroundColor = ConsoleColor.DarkBlue;
-                    Console.WriteLine("========== XelaDriver ==========");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("============================================== XelaDriver ==============================================");
                     Console.WriteLine();
                     Console.ResetColor();
                     Console.ForegroundColor = ConsoleColor.Blue;
@@ -399,31 +491,35 @@ namespace Proyectco_01_s2
                         "6. Gestion de Incidencias \n" +
                         "7. Reportes \n" +
                         "8. Salir");
+
                     if(!int.TryParse(Console.ReadLine(), out opcion))
                     {
                         //buscar una forma mas optima de validar los datos
                         //hay que intentar con excepciones
                         Console.BackgroundColor= ConsoleColor.DarkRed;
                         Console.WriteLine("Ingrese su opcion en numeros enteros");
-                    }else { break; }
-                } while (true);
+                    }
+                    else { break; }
+                } 
+                while (true);
+
                 switch(opcion)
                 {
-                    case 1:
+                    case 1: // gestion de clientes
                         break;
-                    case 2:
+                    case 2: // gestion de repartidores
                         break;
-                    case 3:
+                    case 3: // gestion de vehiculos
                         break;
-                    case 4:
+                    case 4: // gestion de paquetes
                         break;
-                    case 5:
+                    case 5: // gestion de entregas
                         break;
-                    case 6:
+                    case 6: // gestion de incidencias
                         break;
-                    case 7:
+                    case 7: // reportes
                         break; 
-                    case 8:
+                    case 8: //bye perro
                         break;
                     default:
                         Console.ResetColor();
@@ -432,40 +528,61 @@ namespace Proyectco_01_s2
                         break;
                 }
             }
+
+            List<Cliente> clientes = new List<Cliente>();
+            List<Repartidor> repartidores = new List<Repartidor>();
+            List<Vehiculo> vehiculos = new List<Vehiculo>();
+            List<Paquete> paquetes = new List<Paquete>();
+
             void MenuClientes()
             {
                 do
                 {
                     Console.ResetColor();
-                    Console.WriteLine("======== Menu clientes ========");
-                    Console.WriteLine();
-                    Console.WriteLine("Seleccione una opcion: \n" +
-                        "1. Registrar nuevo cliente \n" +
-                        "2. Consultar lista de clientes \n" +
-                        "3. Actualizar cliente existente \n" +
-                        "4. Regresar");
-                    if(!int.TryParse(Console.ReadLine(), out opcion))
+                    Console.WriteLine(@"======== Menu clientes ========
+Seleccione una opcion: 
+1. Registrar nuevo cliente 
+2. Consultar lista de clientes 
+3. Actualizar cliente existente 
+4. Regresar");
+                    do
                     {
-                        Console.BackgroundColor = ConsoleColor.DarkRed;
-                        Console.WriteLine("Ingrese su opcion en numeros enteros");
-                    }else
+                        if (!int.TryParse(Console.ReadLine(), out opcion))
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkRed;
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.WriteLine("Ingrese su opcion en numeros enteros");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    } while (true);
+                    switch (opcion)
                     {
-                        break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            MenuPrincipal();
+                            break;
+                        default:
+                            Console.ResetColor();
+                            Console.BackgroundColor = ConsoleColor.DarkRed;
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.WriteLine("Opcion invalida");
+                            Console.ResetColor();
+                            break;
                     }
-                } while (true);
-                switch (opcion)
-                {
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4: MenuPrincipal(); break;
-                    default : Console.ResetColor(); Console.BackgroundColor = ConsoleColor.DarkRed;
-                        Console.WriteLine("Opcion invalida"); break;
-                }
+
+                } while (opcion != 4);
+
             }
+            MenuClientes();
         }
     }
 }
