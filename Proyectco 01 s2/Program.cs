@@ -470,7 +470,19 @@ namespace Proyectco_01_s2
 
         static void Main(string[] args)
         {
+            //variables
             int opcion;
+            string nombre, numeroTelefono;
+
+            List<Cliente> clientes = new List<Cliente>();
+            List<Repartidor> repartidores = new List<Repartidor>();
+            List<Vehiculo> vehiculos = new List<Vehiculo>();
+            List<Paquete> paquetes = new List<Paquete>();
+
+            List<int> id = new List<int>();
+            Random IDrand = new Random();
+
+            //funciones y procedimentos
             void MenuPrincipal()
             {
                 do
@@ -506,6 +518,7 @@ namespace Proyectco_01_s2
                 switch(opcion)
                 {
                     case 1: // gestion de clientes
+                        MenuClientes();
                         break;
                     case 2: // gestion de repartidores
                         break;
@@ -520,6 +533,7 @@ namespace Proyectco_01_s2
                     case 7: // reportes
                         break; 
                     case 8: //bye perro
+                        Console.WriteLine("Adios");
                         break;
                     default:
                         Console.ResetColor();
@@ -528,61 +542,116 @@ namespace Proyectco_01_s2
                         break;
                 }
             }
-
-            List<Cliente> clientes = new List<Cliente>();
-            List<Repartidor> repartidores = new List<Repartidor>();
-            List<Vehiculo> vehiculos = new List<Vehiculo>();
-            List<Paquete> paquetes = new List<Paquete>();
+            int GenerarID()
+            {
+                int NuevoID = IDrand.Next(1000, 9999);
+                foreach (int i in id)
+                {
+                    if (i == NuevoID)
+                    {
+                        return GenerarID();
+                    }
+                }
+                id.Add(NuevoID);
+                return NuevoID;
+            }
 
             void MenuClientes()
             {
-                do
-                {
-                    Console.ResetColor();
-                    Console.WriteLine(@"======== Menu clientes ========
+                Console.ResetColor();
+                Console.WriteLine(@"======== Menu clientes ========
 Seleccione una opcion: 
 1. Registrar nuevo cliente 
 2. Consultar lista de clientes 
 3. Actualizar cliente existente 
 4. Regresar");
-                    do
+                do
+                {
+                    if (!int.TryParse(Console.ReadLine(), out opcion))
                     {
-                        if (!int.TryParse(Console.ReadLine(), out opcion))
-                        {
-                            Console.BackgroundColor = ConsoleColor.DarkRed;
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.WriteLine("Ingrese su opcion en numeros enteros");
-                            Console.ResetColor();
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    } while (true);
-                    switch (opcion)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            MenuPrincipal();
-                            break;
-                        default:
-                            Console.ResetColor();
-                            Console.BackgroundColor = ConsoleColor.DarkRed;
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.WriteLine("Opcion invalida");
-                            Console.ResetColor();
-                            break;
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("Ingrese su opcion en numeros enteros");
+                        Console.ResetColor();
                     }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+                switch (opcion)
+                {
+                    case 1:
+                        Console.WriteLine("Ingresa el Nuevo nombre:");
+                        nombre = Console.ReadLine();
+                        Console.WriteLine("Ingrese el nuevo numero de telefono:");
+                        numeroTelefono = Console.ReadLine();
+                        Console.WriteLine("Ingrese el nuevo correo electronico:");
+                        string correo = Console.ReadLine();
+                        Console.WriteLine("Ingrese la nueva direccion:");
+                        string direccion = Console.ReadLine();
+                        //Agregar validaciones
+                        Cliente cliente = new Cliente(GenerarID(), nombre, numeroTelefono, correo, direccion, 1);
+                        clientes.Add(cliente);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Cliente agregado");
+                        Console.ResetColor();
+                        MenuClientes();
+                        break;
+                    case 2:
+                        foreach (Cliente objeto in clientes)
+                        {
+                            objeto.MostrarInformacion();
+                        }
+                        MenuClientes();
+                        break;
+                    case 3:
+                        int codigo;
+                        do
+                        {
+                            Console.ResetColor();
+                            foreach (Cliente objeto in clientes)
+                            {
+                                objeto.MostrarInformacion();
+                            }
+                            Console.WriteLine("Seleccione el codigo del cliente:");
+                            if (!int.TryParse(Console.ReadLine(), out codigo))
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("ingrese el codigo solo con numeros");
+                            }
+                            else { break; }
+                        } while (true);
+                        int posicion = clientes.FindIndex(p => p.Codigo == codigo);
+                        Console.WriteLine("Ingresa el Nuevo nombre:");
+                        Console.WriteLine("Ingrese el nuevo numero de telefono:");
+                        Console.WriteLine("Ingrese el nuevo correo electronico:");
+                        Console.WriteLine("Ingrese la nueva direccion:");
+                        //implementar las validaciones
+                        //aplicar lo siguiente: 
 
-                } while (opcion != 4);
-
+                        //clientes[posicion].Nombre = nuevo nombre;
+                        //clientes[posicion].Numero = nuevo numero;
+                        //clientes[posicion].Correo = nuevo correo;
+                        //clientes[posicion].Direccion = nuevo direccion;
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Datos actualizados");
+                        MenuClientes();
+                        break;
+                    case 4:
+                        MenuPrincipal();
+                        break;
+                    default:
+                        Console.ResetColor();
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("Opcion invalida");
+                        Console.ResetColor();
+                        break;
+                }
             }
-            MenuClientes();
+            //programa
+            MenuPrincipal();
         }
     }
 }
