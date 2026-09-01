@@ -495,66 +495,153 @@ namespace Proyectco_01_s2
             Random IDrand = new Random();
 
             //funciones y procedimentos
+
+            void Titulo(string texto, ConsoleColor colorFondo = ConsoleColor.DarkBlue)
+            {
+                Console.Clear();
+                Console.ResetColor();
+                int ancho = 100;
+                Console.BackgroundColor = colorFondo;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(new string('=', ancho));
+                int espacios = (ancho - texto.Length) / 2;
+                Console.WriteLine(new string(' ', espacios) + texto + " " + new string(' ', espacios));
+                Console.WriteLine(new string('=', ancho));
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+
+            void OpcionMenu(string numero, string texto)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("  [" + numero + "] ");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine(texto);
+                Console.ResetColor();
+            }
+
+            void MensajeExito(string mensaje)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.WriteLine();
+                Console.WriteLine("  ✓ " + mensaje);
+                Console.ResetColor();
+            }
+
+            void MensajeError(string mensaje)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine();
+                Console.WriteLine("  X ERROR: " + mensaje);
+                Console.ResetColor();
+            }
+
+            void Pausa()
+            {
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("Presione cualquier tecla para continuar....................");
+                Console.ResetColor();
+                Console.ReadKey();
+            }
+
             void MenuPrincipal()
             {
                 do
                 {
-                    Console.ResetColor();
-                    Console.BackgroundColor = ConsoleColor.DarkBlue;
+                    Titulo("X E L A D R I V E R", ConsoleColor.DarkBlue);
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("============================================== XelaDriver ==============================================");
+                    Console.WriteLine("                         SISTEMA DE GESTIÓN DE ENTREGAS");
                     Console.ResetColor();
                     Console.WriteLine();
-                   
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("Seleccione una opcion: \n" +
-                        "1. Gestion de Clientes \n" +
-                        "2. Gestion de Repartidores \n" +
-                        "3. Gestion de Vehiculos \n" +
-                        "4. Gestion de Paquetes \n" +
-                        "5. Gestion de Entregas \n" +
-                        "6. Gestion de Incidencias \n" +
-                        "7. Reportes \n" +
-                        "8. Salir");
-                    Console.ResetColor();
-                    if(!int.TryParse(Console.ReadLine(), out opcion))
-                    {
-                        //buscar una forma mas optima de validar los datos
-                        //hay que intentar con excepciones
-                        Console.BackgroundColor= ConsoleColor.DarkRed;
-                        Console.WriteLine("Ingrese su opcion en numeros enteros");
-                    }
-                    else { break; }
-                } 
-                while (true);
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine();
 
-                switch(opcion)
-                {
-                    case 1: // gestion de clientes
-                        MenuClientes();
-                        break;
-                    case 2: // gestion de repartidores
-                        MenuRepartidor();
-                        break;
-                    case 3: // gestion de vehiculos
-                        break;
-                    case 4: // gestion de paquetes
-                        break;
-                    case 5: // gestion de entregas
-                        break;
-                    case 6: // gestion de incidencias
-                        break;
-                    case 7: // reportes
-                        break; 
-                    case 8: //bye perro
-                        Console.WriteLine("Adios");
-                        break;
-                    default:
-                        Console.ResetColor();
-                        Console.BackgroundColor = ConsoleColor.DarkRed;
-                        Console.WriteLine("Opcion Invalida");
-                        break;
-                }
+                    OpcionMenu("1", "Gestión de Clientes");
+                    OpcionMenu("2", "Gestión de Repartidores");
+                    OpcionMenu("3", "Gestión de Vehículos");
+                    OpcionMenu("4", "Gestión de Paquetes");
+                    OpcionMenu("5", "Gestión de Entregas");
+                    OpcionMenu("6", "Gestión de Incidencias");
+                    OpcionMenu("7", "Reportes");
+
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write("  [8] ");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("Salir");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Seleccione una opción: ");
+                    Console.ResetColor();
+
+                    if (!int.TryParse(Console.ReadLine(), out opcion))
+                    {
+                        MensajeError("Ingrese la opción utilizando números enteros.");
+                        Pausa();
+                        continue;
+                    }
+
+                    switch (opcion)
+                    {
+                        case 1:
+                            MenuClientes();
+                            break;
+
+                        case 2:
+                            MenuRepartidor();
+                            break;
+
+                        case 3:
+                            MensajeError("Módulo en desarrollo.");
+                            Pausa();
+                            break;
+
+                        case 4:
+                            MensajeError("Módulo en desarrollo.");
+                            Pausa();
+                            break;
+
+                        case 5:
+                            MensajeError("Módulo en desarrollo.");
+                            Pausa();
+                            break;
+
+                        case 6:
+                            MensajeError("Módulo en desarrollo.");
+                            Pausa();
+                            break;
+
+                        case 7:
+                            MensajeError("Módulo en desarrollo.");
+                            Pausa();
+                            break;
+
+                        case 8:
+
+                            Console.Clear();
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+
+                            Console.WriteLine();
+                            Console.WriteLine(@"                Gracias por utilizar XelaDriver
+
+                                                                       ¡Hasta pronto!");
+
+                            Console.ResetColor();
+                            return;
+
+                        default:
+                            MensajeError("La opción seleccionada no existe.");
+                            Pausa();
+                            break;
+                    }
+
+                } while (true);
             }
             int GenerarID()
             {
