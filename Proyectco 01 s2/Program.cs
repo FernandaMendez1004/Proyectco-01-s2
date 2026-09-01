@@ -78,25 +78,31 @@ namespace Proyectco_01_s2
                 }
             }
 
-            private int cantidadPersonas;
+            private int cantidadPedidos;
 
-            public int CantidadPersonas
+            public int CantidadPedidos
             {
-                get { return cantidadPersonas; }
+                get { return cantidadPedidos; }
                 set { if (value > 0)
-                    { cantidadPersonas = value; }
+                    { cantidadPedidos = value; }
                 }
             }
 
            
             public override void MostrarInformacion()
             {
-                Console.WriteLine("Código: " + Codigo);
-                Console.WriteLine("Nombre: " + Nombre);
-                Console.WriteLine("Número de Teléfono: " + NumeroTelefono);
-                Console.WriteLine("Correo Electrónico: " + CorreoElectronico);
-                Console.WriteLine("Dirección: " + Direccion);
-                Console.WriteLine("Cantidad de Personas: " + CantidadPersonas);
+                Console.Write("Código: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Codigo);
+                Console.ResetColor();
+                Console.Write("Nombre: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Nombre);
+                Console.ResetColor();
+                Console.Write("Número de Teléfono: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(NumeroTelefono);
+                Console.ResetColor();
+                Console.Write("Correo Electrónico: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(CorreoElectronico);
+                Console.ResetColor();
+                Console.Write("Dirección: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Direccion);
+                Console.ResetColor();
+                Console.Write("Cantidad de Pedidos: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(CantidadPedidos);
+                Console.ResetColor();
             }
 
             public Cliente(int codigo, string nombre, string numeroTelefono, string correoElectronico, string direccion, int cantidadPersonas)
@@ -104,7 +110,7 @@ namespace Proyectco_01_s2
             {
                 CorreoElectronico = correoElectronico;
                 Direccion = direccion;
-                CantidadPersonas = cantidadPersonas;
+                CantidadPedidos = cantidadPersonas;
             }
 
         }
@@ -149,12 +155,18 @@ namespace Proyectco_01_s2
 
             public override void MostrarInformacion()
             {
-                Console.WriteLine("Código: " + Codigo);
-                Console.WriteLine("Nombre: " + Nombre);
-                Console.WriteLine("Número de Teléfono: " + NumeroTelefono);
-                Console.WriteLine("Tipo de Licencia: " + TipoLicencia);
-                Console.WriteLine("Cantidad de Entregas: " + CantidadEntregas);
-                Console.WriteLine("Calificación: " + Calificacion);
+                Console.Write("Código: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Codigo);
+                Console.ResetColor();
+                Console.Write("Nombre: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Nombre);
+                Console.ResetColor();
+                Console.Write("Número de Teléfono: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(NumeroTelefono);
+                Console.ResetColor();
+                Console.Write("Tipo de Licencia: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(TipoLicencia);
+                Console.ResetColor();
+                Console.Write("Cantidad de Entregas: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(CantidadEntregas);
+                Console.ResetColor();
+                Console.Write("Calificación: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Calificacion);
+                Console.ResetColor();
             }
 
             public Repartidor(int codigo, string nombre, string numeroTelefono, char tipoLicencia, bool disponibilidad, int cantidadEntregas, double calificacion)
@@ -491,11 +503,12 @@ namespace Proyectco_01_s2
                     Console.BackgroundColor = ConsoleColor.DarkBlue;
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine("============================================== XelaDriver ==============================================");
-                    Console.WriteLine();
                     Console.ResetColor();
+                    Console.WriteLine();
+                   
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine("Seleccione una opcion: \n" +
-                        "1. Gestion de Clientes" +
+                        "1. Gestion de Clientes \n" +
                         "2. Gestion de Repartidores \n" +
                         "3. Gestion de Vehiculos \n" +
                         "4. Gestion de Paquetes \n" +
@@ -503,7 +516,7 @@ namespace Proyectco_01_s2
                         "6. Gestion de Incidencias \n" +
                         "7. Reportes \n" +
                         "8. Salir");
-
+                    Console.ResetColor();
                     if(!int.TryParse(Console.ReadLine(), out opcion))
                     {
                         //buscar una forma mas optima de validar los datos
@@ -521,6 +534,7 @@ namespace Proyectco_01_s2
                         MenuClientes();
                         break;
                     case 2: // gestion de repartidores
+                        MenuRepartidor();
                         break;
                     case 3: // gestion de vehiculos
                         break;
@@ -544,7 +558,7 @@ namespace Proyectco_01_s2
             }
             int GenerarID()
             {
-                int NuevoID = IDrand.Next(1000, 9999);
+                int NuevoID = IDrand.Next(10000, 99999);
                 foreach (int i in id)
                 {
                     if (i == NuevoID)
@@ -558,15 +572,22 @@ namespace Proyectco_01_s2
 
             void MenuClientes()
             {
-                Console.ResetColor();
-                Console.WriteLine(@"======== Menu clientes ========
-Seleccione una opcion: 
+                string correo, direccion;
+
+                do
+                {
+                    Console.ResetColor();
+                    Console.BackgroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("======== Menu clientes ========");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine(@"Seleccione una opcion: 
 1. Registrar nuevo cliente 
 2. Consultar lista de clientes 
 3. Actualizar cliente existente 
 4. Regresar");
-                do
-                {
+                    Console.ResetColor();  
                     if (!int.TryParse(Console.ReadLine(), out opcion))
                     {
                         Console.BackgroundColor = ConsoleColor.DarkRed;
@@ -581,15 +602,16 @@ Seleccione una opcion:
                 } while (true);
                 switch (opcion)
                 {
+                    
                     case 1:
-                        Console.WriteLine("Ingresa el Nuevo nombre:");
+                        Console.WriteLine("Ingresa el nombre:");
                         nombre = Console.ReadLine();
-                        Console.WriteLine("Ingrese el nuevo numero de telefono:");
+                        Console.WriteLine("Ingrese el numero de telefono:");
                         numeroTelefono = Console.ReadLine();
-                        Console.WriteLine("Ingrese el nuevo correo electronico:");
-                        string correo = Console.ReadLine();
-                        Console.WriteLine("Ingrese la nueva direccion:");
-                        string direccion = Console.ReadLine();
+                        Console.WriteLine("Ingrese el correo electronico:");
+                        correo = Console.ReadLine();
+                        Console.WriteLine("Ingrese la direccion:");
+                        direccion = Console.ReadLine();
                         //Agregar validaciones
                         Cliente cliente = new Cliente(GenerarID(), nombre, numeroTelefono, correo, direccion, 1);
                         clientes.Add(cliente);
@@ -602,6 +624,7 @@ Seleccione una opcion:
                         foreach (Cliente objeto in clientes)
                         {
                             objeto.MostrarInformacion();
+                            Console.WriteLine();
                         }
                         MenuClientes();
                         break;
@@ -624,16 +647,19 @@ Seleccione una opcion:
                         } while (true);
                         int posicion = clientes.FindIndex(p => p.Codigo == codigo);
                         Console.WriteLine("Ingresa el Nuevo nombre:");
+                        nombre = Console.ReadLine();
                         Console.WriteLine("Ingrese el nuevo numero de telefono:");
+                        numeroTelefono = Console.ReadLine();
                         Console.WriteLine("Ingrese el nuevo correo electronico:");
+                        correo = Console.ReadLine();
                         Console.WriteLine("Ingrese la nueva direccion:");
+                        direccion = Console.ReadLine();
                         //implementar las validaciones
-                        //aplicar lo siguiente: 
-
-                        //clientes[posicion].Nombre = nuevo nombre;
-                        //clientes[posicion].Numero = nuevo numero;
-                        //clientes[posicion].Correo = nuevo correo;
-                        //clientes[posicion].Direccion = nuevo direccion;
+                        
+                        clientes[posicion].Nombre = nombre;
+                        clientes[posicion].NumeroTelefono = numeroTelefono;
+                        clientes[posicion].CorreoElectronico = correo;
+                        clientes[posicion].Direccion = direccion;
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Datos actualizados");
                         MenuClientes();
@@ -647,6 +673,122 @@ Seleccione una opcion:
                         Console.ForegroundColor = ConsoleColor.Black;
                         Console.WriteLine("Opcion invalida");
                         Console.ResetColor();
+                        MenuClientes();
+                        break;
+                }
+            }
+            void MenuRepartidor()
+            {
+                char licencia;
+                bool disponibilidad = true;
+                int entregas = 0;
+                double calificacionPromedio, calificacion = 0;
+
+                do
+                {
+                    Console.ResetColor();
+                    Console.BackgroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("======== Menu repartidores ========");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("Seleccione una opcion: \n" +
+                        "1. Registrar nuevo repartidor \n" +
+                        "2. Consultar lista de repartidores\n" +
+                        "3. Actualizar repartidor existente \n" +
+                        "4. Cambiar disponibilidad \n" +
+                        "5. Regresar al menu principal.");
+                    Console.ResetColor();
+                    if (!int.TryParse(Console.ReadLine(), out opcion))
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("Ingrese su opcion en numeros enteros");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+                switch (opcion)
+                {
+
+                    case 1:
+                        Console.WriteLine("Ingresa el nombre:");
+                        nombre = Console.ReadLine();
+                        Console.WriteLine("Ingrese el numero de telefono:");
+                        numeroTelefono = Console.ReadLine();
+                        Console.WriteLine("Ingrese el tipo de licencia:");
+                        // validar entrada
+                        licencia = char.Parse(Console.ReadLine());
+                        //Agregar una forma de calcular el promedio, que se actualize solo
+                        //Agregar validaciones
+                        Repartidor repartidor = new Repartidor(GenerarID(), nombre, numeroTelefono, licencia, disponibilidad, entregas, 0);
+                        repartidores.Add(repartidor);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Repartidor agregado");
+                        Console.ResetColor();
+                        MenuRepartidor();
+                        break;
+                    case 2:
+                        foreach (Repartidor objeto in repartidores)
+                        {
+                            objeto.MostrarInformacion();
+                            Console.WriteLine();
+                        }
+                        MenuRepartidor();
+                        break;
+                    case 3:
+                        int codigo;
+                        do
+                        {
+                            Console.ResetColor();
+                            foreach (Repartidor objeto in repartidores)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                            Console.WriteLine("Seleccione el codigo del repartidor:");
+                            if (!int.TryParse(Console.ReadLine(), out codigo))
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("ingrese el codigo solo con numeros");
+                            }
+                            else { break; }
+                        } while (true);
+                        int posicion = repartidores.FindIndex(p => p.Codigo == codigo);
+                        Console.WriteLine("Ingresa el Nuevo nombre:");
+                        nombre = Console.ReadLine();
+                        Console.WriteLine("Ingrese el nuevo numero de telefono:");
+                        numeroTelefono = Console.ReadLine();
+                        Console.WriteLine("Ingrese la nueva licencia:");
+                        //validar entrada
+                        licencia = char.Parse(Console.ReadLine());
+                        //implementar las validaciones
+
+                        repartidores[posicion].Nombre = nombre;
+                        repartidores[posicion].NumeroTelefono = numeroTelefono;
+                        repartidores[posicion].TipoLicencia = licencia;
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Datos actualizados");
+                        MenuRepartidor();
+                        break;
+                    case 4:
+                        //nose agregar un metodo para cambiar la disponibilidad
+                        Console.WriteLine("Se modigicara eso pronto...");
+                        MenuRepartidor();
+                        break;
+                    case 5:
+                        MenuPrincipal();
+                        break;
+                    default:
+                        Console.ResetColor();
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("Opcion invalida");
+                        Console.ResetColor();
+                        MenuRepartidor();
                         break;
                 }
             }
