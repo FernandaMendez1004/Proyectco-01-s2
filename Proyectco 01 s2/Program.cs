@@ -595,8 +595,7 @@ namespace Proyectco_01_s2
                             break;
 
                         case 3:
-                            MensajeError("Módulo en desarrollo.");
-                            Pausa();
+                            MenuVehiculo();
                             break;
 
                         case 4:
@@ -654,13 +653,24 @@ namespace Proyectco_01_s2
                 return NuevoID;
             }
 
+             bool ValidarCliente  (Cliente objeto)
+            {
+                do
+                {
+                    if (objeto.Nombre != nombre)
+                    {
+                        
+                    }
+                }
+            }
+
             void MenuClientes()
             {
                 string correo, direccion;
 
                 do
                 {
-                    Titulo("M E N U  C L I E N T E S", ConsoleColor.DarkMagenta);
+                    Titulo("MENÚ CLIENTES", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
@@ -777,19 +787,23 @@ namespace Proyectco_01_s2
 
                 do
                 {
-                    Console.ResetColor();
-                    Console.BackgroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine("======== Menu repartidores ========");
-                    Console.ResetColor();
+                    Titulo("MENÚ REPARTIDORES", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("Seleccione una opcion: \n" +
-                        "1. Registrar nuevo repartidor \n" +
-                        "2. Consultar lista de repartidores\n" +
-                        "3. Actualizar repartidor existente \n" +
-                        "4. Cambiar disponibilidad \n" +
-                        "5. Regresar al menu principal.");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine();
+
+                    OpcionMenu("1", "Agregar nuevo repartidor", ConsoleColor.Magenta);
+                    OpcionMenu("2", "Consultar lista de repartidores", ConsoleColor.Magenta);
+                    OpcionMenu("3", "Actualizar repartidor existente", ConsoleColor.Magenta);
+                    OpcionMenu("4", "Cambiar disponibilidad", ConsoleColor.Magenta);
+                    OpcionMenu("5", "Regresar", ConsoleColor.Magenta);
+
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Seleccione una opción: ");
                     Console.ResetColor();
+
                     if (!int.TryParse(Console.ReadLine(), out opcion))
                     {
                         Console.BackgroundColor = ConsoleColor.DarkRed;
@@ -802,6 +816,7 @@ namespace Proyectco_01_s2
                         break;
                     }
                 } while (true);
+             
                 switch (opcion)
                 {
 
@@ -884,6 +899,106 @@ namespace Proyectco_01_s2
                         break;
                 }
             }
+
+            void MenuVehiculo()
+            {
+                char licencia;
+                bool disponibilidad = true;
+                int entregas = 0;
+                double calificacionPromedio, calificacion = 0;
+
+                do
+                {
+                    Titulo("MENÚ VEHICULO", ConsoleColor.DarkMagenta);
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine();
+
+                    OpcionMenu("1", "Agregar nuevo vehiculo", ConsoleColor.Magenta);
+                    OpcionMenu("2", "Consultar lista de vehiculos", ConsoleColor.Magenta);
+                    OpcionMenu("3", "Actualizar vehiculo existente", ConsoleColor.Magenta);
+                    OpcionMenu("4", "Regresar", ConsoleColor.Magenta);
+
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Seleccione una opción: ");
+                    Console.ResetColor();
+
+                    if (!int.TryParse(Console.ReadLine(), out opcion))
+                    {
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("Ingrese su opcion en numeros enteros");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+
+                switch (opcion)
+                {
+
+                    case 1:
+                        // aca tiene que ir la logica para agregar un vehiculo
+                        // validar entrada
+                        licencia = char.Parse(Console.ReadLine());
+                        //Agregar una forma de calcular el promedio, que se actualize solo
+                        //Agregar validaciones
+                        
+                        Console.WriteLine("Vehiculo agregado");
+                        Console.ResetColor();
+                        MenuVehiculo();
+                        break;
+                    case 2:
+                        foreach (Vehiculo objeto in vehiculos)
+                        {
+                            objeto.MostrarInformacion();
+                            Console.WriteLine();
+                        }
+                        Console.ReadKey();
+                        MenuVehiculo();
+                        break;
+                    case 3:
+                        int codigo;
+                        do
+                        {
+                            Console.ResetColor();
+                            foreach (Vehiculo objeto in vehiculos)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                            Console.WriteLine("Seleccione el codigo del vehiculo:");
+                            if (!int.TryParse(Console.ReadLine(), out codigo))
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkRed;
+                                Console.WriteLine("ingrese el codigo solo con numeros");
+                            }
+                            else { break; }
+                        } while (true);
+                       
+                        // hacer la mrd de ver vehiculol
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Datos actualizados");
+                        MenuVehiculo();
+                        break;
+                    case 4:
+                        MenuPrincipal();
+                        break;
+                    default:
+                        Console.ResetColor();
+                        Console.BackgroundColor = ConsoleColor.DarkRed;
+                        Console.ForegroundColor = ConsoleColor.Black;
+                        Console.WriteLine("Opcion invalida");
+                        Console.ResetColor();
+                        MenuVehiculo();
+                        break;
+                }
+            }
+
             //programa
             MenuPrincipal();
         }
