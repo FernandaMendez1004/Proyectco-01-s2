@@ -496,7 +496,7 @@ namespace Proyectco_01_s2
 
             //funciones y procedimentos
 
-            void Titulo(string texto, ConsoleColor colorFondo = ConsoleColor.DarkBlue)
+            void Titulo(string texto, ConsoleColor colorFondo)
             {
                 Console.Clear();
                 Console.ResetColor();
@@ -511,9 +511,9 @@ namespace Proyectco_01_s2
                 Console.WriteLine();
             }
 
-            void OpcionMenu(string numero, string texto)
+            void OpcionMenu(string numero, string texto, ConsoleColor colorTex )
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.ForegroundColor = colorTex;
                 Console.Write("  [" + numero + "] ");
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine(texto);
@@ -559,20 +559,18 @@ namespace Proyectco_01_s2
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
 
-                    OpcionMenu("1", "Gestión de Clientes");
-                    OpcionMenu("2", "Gestión de Repartidores");
-                    OpcionMenu("3", "Gestión de Vehículos");
-                    OpcionMenu("4", "Gestión de Paquetes");
-                    OpcionMenu("5", "Gestión de Entregas");
-                    OpcionMenu("6", "Gestión de Incidencias");
-                    OpcionMenu("7", "Reportes");
+                    OpcionMenu("1", "Gestión de Clientes", ConsoleColor.Blue);
+                    OpcionMenu("2", "Gestión de Repartidores", ConsoleColor.Blue);
+                    OpcionMenu("3", "Gestión de Vehículos", ConsoleColor.Blue);
+                    OpcionMenu("4", "Gestión de Paquetes", ConsoleColor.Blue);
+                    OpcionMenu("5", "Gestión de Entregas", ConsoleColor.Blue);
+                    OpcionMenu("6", "Gestión de Incidencias", ConsoleColor.Blue);
+                    OpcionMenu("7", "Reportes", ConsoleColor.Blue);
 
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.Write("  [8] ");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("Salir");
-                    Console.ResetColor();
+
+                    OpcionMenu("8", "Salir", ConsoleColor.DarkRed);
+
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
                     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -583,10 +581,10 @@ namespace Proyectco_01_s2
                     {
                         MensajeError("Ingrese la opción utilizando números enteros.");
                         Pausa();
-                        continue;
-                    }
+                    }else { break; }
+                } while (true);
 
-                    switch (opcion)
+                switch (opcion)
                     {
                         case 1:
                             MenuClientes();
@@ -628,20 +626,19 @@ namespace Proyectco_01_s2
                             Console.ForegroundColor = ConsoleColor.Green;
 
                             Console.WriteLine();
-                            Console.WriteLine(@"                Gracias por utilizar XelaDriver
+                            Console.WriteLine(@"             
+                                                 Gracias por utilizar XelaDriver
 
-                                                                       ¡Hasta pronto!");
+                                                        ¡Hasta pronto!");
 
                             Console.ResetColor();
-                            return;
+                            break;
 
                         default:
                             MensajeError("La opción seleccionada no existe.");
                             Pausa();
                             break;
-                    }
-
-                } while (true);
+                }
             }
             int GenerarID()
             {
@@ -663,18 +660,22 @@ namespace Proyectco_01_s2
 
                 do
                 {
-                    Console.ResetColor();
-                    Console.BackgroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine("======== Menu clientes ========");
-                    Console.ResetColor();
+                    Titulo("M E N U  C L I E N T E S", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(@"Seleccione una opcion: 
-1. Registrar nuevo cliente 
-2. Consultar lista de clientes 
-3. Actualizar cliente existente 
-4. Regresar");
-                    Console.ResetColor();  
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine();
+
+                    OpcionMenu("1", "Agregar nuevo cliente", ConsoleColor.Magenta);
+                    OpcionMenu("2", "Ver lista de clientes", ConsoleColor.Magenta);
+                    OpcionMenu("3", "Actualizar cliente existente", ConsoleColor.Magenta);
+                    OpcionMenu("4", "Regresar", ConsoleColor.Magenta);
+
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Seleccione una opción: ");
+                    Console.ResetColor();
+
                     if (!int.TryParse(Console.ReadLine(), out opcion))
                     {
                         Console.BackgroundColor = ConsoleColor.DarkRed;
@@ -699,7 +700,9 @@ namespace Proyectco_01_s2
                         correo = Console.ReadLine();
                         Console.WriteLine("Ingrese la direccion:");
                         direccion = Console.ReadLine();
+
                         //Agregar validaciones
+
                         Cliente cliente = new Cliente(GenerarID(), nombre, numeroTelefono, correo, direccion, 1);
                         clientes.Add(cliente);
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -713,6 +716,7 @@ namespace Proyectco_01_s2
                             objeto.MostrarInformacion();
                             Console.WriteLine();
                         }
+                        Console.ReadKey();
                         MenuClientes();
                         break;
                     case 3:
@@ -824,6 +828,7 @@ namespace Proyectco_01_s2
                             objeto.MostrarInformacion();
                             Console.WriteLine();
                         }
+                        Console.ReadKey();
                         MenuRepartidor();
                         break;
                     case 3:
