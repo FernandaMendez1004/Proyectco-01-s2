@@ -502,7 +502,7 @@ namespace Proyectco_01_s2
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine(new string('=', ancho));
                 int espacios = (ancho - texto.Length) / 2;
-                Console.WriteLine(new string(' ', espacios) + texto + " " + new string(' ', espacios));
+                Console.WriteLine(new string(' ', espacios) + texto + new string(' ', espacios));
                 Console.WriteLine(new string('=', ancho));
                 Console.ResetColor();
                 Console.WriteLine();
@@ -544,7 +544,7 @@ namespace Proyectco_01_s2
             {
                 do
                 {
-                    Titulo("X E L A D R I V E R", ConsoleColor.DarkBlue);
+                    Titulo("X E L A  D R I V E R", ConsoleColor.DarkBlue);
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine();
                     Console.WriteLine("                                 SISTEMA DE GESTIÓN DE ENTREGAS");
@@ -707,6 +707,50 @@ namespace Proyectco_01_s2
                 return true;
             }
 
+           
+
+             bool ValidarVehiculo(Vehiculo objeto, string placa, string marca, string modelo, double capacidad, Vehiculo.estadoVehiculo estado, double costo)
+            {
+                if (objeto.Placa != placa)
+                {
+                    MensajeError("La placa ingresada no es válida.");
+                    return false;
+                }
+
+                if (objeto.Marca != marca)
+                {
+                    MensajeError("La marca ingresada no es válida.");
+                    return false;
+                }
+
+                if (objeto.Modelo != modelo)
+                {
+                    MensajeError("El modelo ingresado no es válido.");
+                    return false;
+                }
+
+                if (objeto.CapacidadCarga != capacidad)
+                {
+                    MensajeError("La capacidad de carga ingresada no es válida.");
+                    return false;
+                }
+
+                if (objeto.Estado != estado)
+                {
+                    MensajeError("El estado ingresado no es válido.");
+                    return false;
+                }
+
+                if (objeto.Costo != costo)
+                {
+                    MensajeError("El costo ingresado no es válido.");
+                    return false;
+                }
+
+                return true;
+            }
+
+                
             void MenuClientes()
             {
                 string correo, direccion;
@@ -714,7 +758,7 @@ namespace Proyectco_01_s2
                 do
                 {
 
-                    Titulo("MENÚ CLIENTES", ConsoleColor.DarkMagenta);
+                    Titulo("MENÚ  CLIENTES", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
@@ -722,7 +766,8 @@ namespace Proyectco_01_s2
                     OpcionMenu("1", "Agregar nuevo cliente", ConsoleColor.Magenta);
                     OpcionMenu("2", "Ver lista de clientes", ConsoleColor.Magenta);
                     OpcionMenu("3", "Actualizar cliente existente", ConsoleColor.Magenta);
-                    OpcionMenu("4", "Regresar", ConsoleColor.Magenta);
+                    Console.WriteLine();
+                    OpcionMenu("4", "Regresar", ConsoleColor.DarkRed);
 
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
@@ -901,7 +946,7 @@ namespace Proyectco_01_s2
 
                 do
                 {
-                    Titulo("MENÚ REPARTIDORES", ConsoleColor.DarkMagenta);
+                    Titulo("MENÚ  REPARTIDORES", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
@@ -910,7 +955,8 @@ namespace Proyectco_01_s2
                     OpcionMenu("2", "Consultar lista de repartidores", ConsoleColor.Magenta);
                     OpcionMenu("3", "Actualizar repartidor existente", ConsoleColor.Magenta);
                     OpcionMenu("4", "Cambiar disponibilidad", ConsoleColor.Magenta);
-                    OpcionMenu("5", "Regresar", ConsoleColor.Magenta);
+                    Console.WriteLine();
+                    OpcionMenu("5", "Regresar", ConsoleColor.DarkRed);
 
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
@@ -1098,14 +1144,183 @@ namespace Proyectco_01_s2
                         break;
                     default:
                         Console.ResetColor();
-                        Console.BackgroundColor = ConsoleColor.DarkRed;
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine("Opcion invalida");
-                        Console.ResetColor();
+                        Pausa();
+                        MensajeError("La opción seleccionada no existe");
                         MenuRepartidor();
                         break;
                 }
             }
+            void MenuTipoVehiculo()
+            {
+                string placaVehiculo, marcaVehiculo, modeloVehiculo;
+                double capacidadCargaVehiculo, costoVehiculo;
+                Vehiculo.estadoVehiculo estado;
+                int opcionVehiculo;
+                bool vehiculoValido = false;
+                do
+                {
+
+                    do
+                    {
+                        Titulo("TIPO DE VEHICULO", ConsoleColor.DarkMagenta);
+                        Console.WriteLine();
+                        OpcionMenu("1", "Bicicleta", ConsoleColor.Magenta);
+                        OpcionMenu("2", "Motocicleta", ConsoleColor.Magenta);
+                        OpcionMenu("3", "Automóvil", ConsoleColor.Magenta);
+                        Console.WriteLine();
+                        OpcionMenu("4", "Regresar", ConsoleColor.DarkRed);
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("Seleccione una opción: ");
+                        Console.ResetColor();
+
+                        if (!int.TryParse(Console.ReadLine(), out opcionVehiculo))
+                        {
+                            MensajeError("Ingrese una opción válida");
+                            Pausa();
+                        }
+
+                        else if (opcionVehiculo < 1 || opcionVehiculo > 4)
+                        {
+                            MensajeError("La opción seleccionada no existe");
+                            Pausa();
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                    } while (true);
+                    if (opcionVehiculo == 4)
+                    {
+                        MenuVehiculo();
+                        
+                    }
+                    else
+                    { 
+                    do
+                    {
+                        Console.Write("Ingrese la placa del vehiculo: ");
+                        placaVehiculo = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(placaVehiculo))
+                        {
+                            break;
+                        }
+                        MensajeError("La placa no puede estar vacía");
+                    } while (true);
+
+                    do
+                    {
+                        Console.Write("Ingrese la marca del vehiculo: ");
+                        marcaVehiculo = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(marcaVehiculo))
+                        {
+                            break;
+                        }
+                        MensajeError("La marca no puede estar vacía");
+                    } while (true);
+
+                    do
+                    {
+                        Console.Write("Ingrese el modelo del vehiculo: ");
+                        modeloVehiculo = Console.ReadLine();
+                        if (!string.IsNullOrEmpty(modeloVehiculo))
+                        {
+                            break;
+                        }
+                        MensajeError("El modelo no puede estar vacío");
+                    } while (true);
+
+                    do
+                    {
+                        Console.Write("Ingrese la capacidad de carga del vehiculo: ");
+                        if (!double.TryParse(Console.ReadLine(), out capacidadCargaVehiculo))
+                        {
+                            MensajeError("Ingrese un valor numérico válido para la capacidad de carga");
+                        }
+                        else if (capacidadCargaVehiculo <= 0)
+                        {
+                            MensajeError("La capacidad de carga debe ser mayor a cero");
+                        }
+                        else
+                        { break; }
+
+                    } while (true);
+
+                    int opcionEstado;
+
+
+                    do
+                    {
+                        OpcionMenu("1", "Disponible", ConsoleColor.Cyan);
+                        OpcionMenu("2", "Asignado", ConsoleColor.Cyan);
+                        OpcionMenu("3", "Mantenimiento", ConsoleColor.Cyan);
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("Seleccione el estado del vehículo: ");
+                        Console.ResetColor();
+
+                        if (!int.TryParse(Console.ReadLine(), out opcionEstado))
+                        {
+                            MensajeError("Ingrese una opción numérica válida");
+                        }
+                        else if (opcionEstado < 1 || opcionEstado > 3)
+                        {
+                            MensajeError("La opción seleccionada no existe");
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                    } while (true);
+                    estado = (Vehiculo.estadoVehiculo)(opcionEstado - 1);
+
+                    do
+                    {
+                        Console.Write("Ingrese el costo del vehiculo: ");
+                        if (!double.TryParse(Console.ReadLine(), out costoVehiculo))
+                        {
+                            MensajeError("Ingrese un valor numérico válido para el costo");
+                        }
+                        else if (costoVehiculo <= 0)
+                        {
+                            MensajeError("El costo debe ser mayor a cero");
+                        }
+                        else
+                        { break; }
+
+                    } while (true);
+
+                    Vehiculo vehiculo;
+
+                    if (opcionVehiculo == 1)
+                    {
+                        vehiculo = new Bicicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                    }
+                    else if (opcionVehiculo == 2)
+                    {
+                        vehiculo = new Motocicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                    }
+                    else
+                    {
+                        vehiculo = new Automovil(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                    }
+
+                    vehiculoValido = ValidarVehiculo(vehiculo, placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+
+                    if (vehiculoValido)
+                    {
+                        vehiculos.Add(vehiculo);
+                        MensajeExito("Vehículo agregado ");
+                    }
+                }
+                    Pausa();
+                    MenuVehiculo();
+                } while (!vehiculoValido) ; 
+               
+            }
+
+            
 
             void MenuVehiculo()
             {
@@ -1116,7 +1331,7 @@ namespace Proyectco_01_s2
 
                 do
                 {
-                    Titulo("MENÚ VEHICULO", ConsoleColor.DarkMagenta);
+                    Titulo("MENÚ  VEHICULO", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
@@ -1124,7 +1339,8 @@ namespace Proyectco_01_s2
                     OpcionMenu("1", "Agregar nuevo vehiculo", ConsoleColor.Magenta);
                     OpcionMenu("2", "Consultar lista de vehiculos", ConsoleColor.Magenta);
                     OpcionMenu("3", "Actualizar vehiculo existente", ConsoleColor.Magenta);
-                    OpcionMenu("4", "Regresar", ConsoleColor.Magenta);
+                    Console.WriteLine();
+                    OpcionMenu("4", "Regresar", ConsoleColor.DarkRed);
 
                     Console.WriteLine();
                     Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
@@ -1149,23 +1365,24 @@ namespace Proyectco_01_s2
                 {
 
                     case 1:
-                        // aca tiene que ir la logica para agregar un vehiculo
-                        // validar entrada
-                        licencia = char.Parse(Console.ReadLine());
-                        //Agregar una forma de calcular el promedio, que se actualize solo
-                        //Agregar validaciones
-                        
-                        Console.WriteLine("Vehiculo agregado");
-                        Console.ResetColor();
-                        MenuVehiculo();
+                        MenuTipoVehiculo();
                         break;
                     case 2:
-                        foreach (Vehiculo objeto in vehiculos)
+                        if (vehiculos.Count == 0)
                         {
-                            objeto.MostrarInformacion();
-                            Console.WriteLine();
+                            MensajeError("No se han ingresado datos de vehículos");
+                            Pausa();
                         }
-                        Console.ReadKey();
+                        else
+                        {
+                            foreach (Vehiculo objeto in vehiculos)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                            Pausa();
+                        }
+                        MenuRepartidor();
                         MenuVehiculo();
                         break;
                     case 3:
@@ -1181,8 +1398,7 @@ namespace Proyectco_01_s2
                             Console.WriteLine("Seleccione el codigo del vehiculo:");
                             if (!int.TryParse(Console.ReadLine(), out codigo))
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkRed;
-                                Console.WriteLine("ingrese el codigo solo con numeros");
+                                MensajeError("Ingrese un valor numerico");
                             }
                             else { break; }
                         } while (true);
@@ -1193,14 +1409,13 @@ namespace Proyectco_01_s2
                         MenuVehiculo();
                         break;
                     case 4:
+                        
                         MenuPrincipal();
                         break;
                     default:
                         Console.ResetColor();
-                        Console.BackgroundColor = ConsoleColor.DarkRed;
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine("Opcion invalida");
-                        Console.ResetColor();
+                        Pausa();
+                        MensajeError("La opción seleccionada no existe");
                         MenuVehiculo();
                         break;
                 }
