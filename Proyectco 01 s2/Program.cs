@@ -748,7 +748,7 @@ namespace Proyectco_01_s2
                 }
 
                 return true;
-            }
+             }
 
                 
             void MenuClientes()
@@ -788,12 +788,12 @@ namespace Proyectco_01_s2
                         break;
                     }
                 } while (true);
-                
+                bool clienteValido = false;
                 switch (opcion)
                 {
                     
                     case 1:
-                        bool clienteValido = false;
+                        
                         do
                         {
                             do
@@ -885,45 +885,114 @@ namespace Proyectco_01_s2
                         break;
                     case 3:
                         int codigo;
-                        do
+                        Console.ResetColor();
+                        if (clientes.Count == 0)
                         {
-                            Console.ResetColor();
+                            MensajeError("No se han ingresado datos de clientes");
+                            Pausa();
+                        }
+                        else
+                        {
                             foreach (Cliente objeto in clientes)
                             {
                                 objeto.MostrarInformacion();
+                                Console.WriteLine();
                             }
-                            Console.WriteLine("Seleccione el codigo del cliente:");
-                            if (!int.TryParse(Console.ReadLine(), out codigo))
+                            do
                             {
-                                Console.BackgroundColor = ConsoleColor.DarkRed;
-                                Console.WriteLine("ingrese el codigo solo con numeros");
+
+                                Console.ResetColor();
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.Write("Seleccione el codigo del cliente: ");
+                                Console.ResetColor();
+                                if (!int.TryParse(Console.ReadLine(), out codigo))
+                                {
+                                    MensajeError("Ingrese el codigo solo con numeros");
+                                    Console.WriteLine();
+                                }
+                                else { break; }
+                            } while (true);
+                            int posicion = clientes.FindIndex(p => p.Codigo == codigo);
+                            if (posicion == -1)
+                            {
+                                MensajeError("No existe un cliente con ese código");
+                                Pausa();
+                                MenuClientes();
+                                break;
                             }
-                            else { break; }
-                        } while (true);
-                        int posicion = clientes.FindIndex(p => p.Codigo == codigo);
-                        if (posicion == -1)
-                        {
-                            MensajeError("No existe un cliente con ese código");
-                            Pausa();
-                            MenuClientes();
-                            break;
+                            do
+                            {
+                                do
+                                {
+                                    Console.Write("Ingrese el nuevo nombre: ");
+                                    nombre = Console.ReadLine();
+                                    if (!string.IsNullOrEmpty(nombre))
+                                    {
+                                        break;
+                                    }
+                                    MensajeError("El nombre no puede estar vacío");
+                                } while (true);
+
+                                do
+                                {
+                                    Console.Write("Ingrese el nuevo número de teléfono: ");
+                                    numeroTelefono = Console.ReadLine();
+                                    if (string.IsNullOrEmpty(numeroTelefono))
+                                    {
+                                        MensajeError("Número de teléfono no puede estar vacío");
+                                    }
+                                    else if (numeroTelefono.Length != 8)
+                                    {
+                                        MensajeError("Número de teléfono debe tener exactamente 8 dígitos");
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                } while (true);
+
+                                do
+                                {
+                                    Console.Write("Ingrese el nuevo correo electrónico: ");
+                                    correo = Console.ReadLine();
+                                    if (!string.IsNullOrEmpty(correo))
+                                    {
+                                        break;
+                                    }
+                                    MensajeError("El correo no puede estar vacío");
+                                } while (true);
+
+                                do
+                                {
+                                    Console.Write("Ingrese la nueva dirección: ");
+                                    direccion = Console.ReadLine();
+
+                                    if (!string.IsNullOrEmpty(direccion))
+                                    {
+                                        break;
+                                    }
+
+                                    MensajeError("La dirección no puede estar vacia");
+
+                                } while (true);
+
+                                clientes[posicion].Nombre = nombre;
+                                clientes[posicion].NumeroTelefono = numeroTelefono;
+                                clientes[posicion].CorreoElectronico = correo;
+                                clientes[posicion].Direccion = direccion;
+
+                                clienteValido = ValidarCliente(clientes[posicion], nombre, numeroTelefono, correo, direccion);
+
+                                if (clienteValido)
+                                {
+
+                                    MensajeExito("Cliente agregado ");
+                                }
+                            } while (!clienteValido); ;
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Datos actualizados");
                         }
-                        Console.WriteLine("Ingresa el Nuevo nombre:");
-                        nombre = Console.ReadLine();
-                        Console.WriteLine("Ingrese el nuevo numero de telefono:");
-                        numeroTelefono = Console.ReadLine();
-                        Console.WriteLine("Ingrese el nuevo correo electronico:");
-                        correo = Console.ReadLine();
-                        Console.WriteLine("Ingrese la nueva direccion:");
-                        direccion = Console.ReadLine();
-                        //implementar las validaciones
-                        
-                        clientes[posicion].Nombre = nombre;
-                        clientes[posicion].NumeroTelefono = numeroTelefono;
-                        clientes[posicion].CorreoElectronico = correo;
-                        clientes[posicion].Direccion = direccion;
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Datos actualizados");
                         MenuClientes();
                         break;
                     case 4:
