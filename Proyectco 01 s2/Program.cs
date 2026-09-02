@@ -983,11 +983,6 @@ namespace Proyectco_01_s2
 
                                 clienteValido = ValidarCliente(clientes[posicion], nombre, numeroTelefono, correo, direccion);
 
-                                if (clienteValido)
-                                {
-
-                                    MensajeExito("Cliente agregado ");
-                                }
                             } while (!clienteValido); ;
 
                             Console.ForegroundColor = ConsoleColor.Green;
@@ -1009,7 +1004,7 @@ namespace Proyectco_01_s2
             void MenuRepartidor()
             {
                 char licencia;
-                bool disponibilidad = true;
+                bool disponibilidad = true, repartidorValido; 
                 int entregas = 0;
                 double calificacionPromedio, calificacion = 0;
 
@@ -1045,104 +1040,109 @@ namespace Proyectco_01_s2
                         break;
                     }
                 } while (true);
-             
+
+
                 switch (opcion)
                 {
 
                     case 1:
-                       do { 
-                        Console.Write("Ingrese el nombre: ");
-                            nombre = Console.ReadLine();
-                            if (!string.IsNullOrEmpty(nombre))
-                            {
-                                break;
-                            }
-                            MensajeError("El nombre no puede estar vacío");
-                        } while (true);
-
-
                         do
                         {
-                            Console.Write("Ingrese el número de teléfono: ");
-                            numeroTelefono = Console.ReadLine();
-                            if (string.IsNullOrEmpty(numeroTelefono))
+                            do
                             {
-                                MensajeError("Número de teléfono no puede estar vacío");
-                            }
-                            else if (numeroTelefono.Length != 8)
+                                Console.Write("Ingrese el nombre: ");
+                                nombre = Console.ReadLine();
+                                if (!string.IsNullOrEmpty(nombre))
+                                {
+                                    break;
+                                }
+                                MensajeError("El nombre no puede estar vacío");
+                            } while (true);
+
+
+                            do
                             {
-                                MensajeError("Número de teléfono debe tener exactamente 8 dígitos");
-                            }
-                            else
+                                Console.Write("Ingrese el número de teléfono: ");
+                                numeroTelefono = Console.ReadLine();
+                                if (string.IsNullOrEmpty(numeroTelefono))
+                                {
+                                    MensajeError("Número de teléfono no puede estar vacío");
+                                }
+                                else if (numeroTelefono.Length != 8)
+                                {
+                                    MensajeError("Número de teléfono debe tener exactamente 8 dígitos");
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            } while (true);
+                            do
                             {
-                                break;
-                            }
-                        } while (true);
-                        do
-                        {
-                            Console.WriteLine("Ingrese el tipo de licencia:");
-                            OpcionMenu("A", "Licencia tipo A", ConsoleColor.Yellow);
-                            OpcionMenu("B", "Licencia tipo B", ConsoleColor.Yellow);
-                            OpcionMenu("C", "Licencia tipo C", ConsoleColor.Yellow);
-                            OpcionMenu("M", "Licencia tipo M", ConsoleColor.Yellow);
-                            OpcionMenu("N/A", "No aplica", ConsoleColor.Yellow);
-                            Console.WriteLine();
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write("Seleccione una opción: ");
-                            Console.ResetColor();
-                            string entradaLicencia = Console.ReadLine().ToUpper().Trim();
+                                Console.WriteLine("Ingrese el tipo de licencia:");
+                                OpcionMenu("A", "Licencia tipo A", ConsoleColor.Yellow);
+                                OpcionMenu("B", "Licencia tipo B", ConsoleColor.Yellow);
+                                OpcionMenu("C", "Licencia tipo C", ConsoleColor.Yellow);
+                                OpcionMenu("M", "Licencia tipo M", ConsoleColor.Yellow);
+                                OpcionMenu("N/A", "No aplica", ConsoleColor.Yellow);
+                                Console.WriteLine();
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.Write("Seleccione una opción: ");
+                                Console.ResetColor();
+                                string entradaLicencia = Console.ReadLine().ToUpper().Trim();
 
-                            if (entradaLicencia == "A" || entradaLicencia == "B" || entradaLicencia == "C" || entradaLicencia == "M")
+                                if (entradaLicencia == "A" || entradaLicencia == "B" || entradaLicencia == "C" || entradaLicencia == "M")
+                                {
+                                    licencia = char.Parse(entradaLicencia.ToUpper());
+                                    break;
+                                }
+                                else if (entradaLicencia == "N/A")
+                                {
+                                    licencia = 'N';
+                                    break;
+                                }
+                                else if (string.IsNullOrEmpty(entradaLicencia))
+                                {
+                                    MensajeError("Licencia no puede estar vacía");
+                                }
+                                else
+                                {
+                                    MensajeError("Opción de licencia no válida");
+                                }
+
+                            }
+                            while (true);
+                            //Agregar una forma de calcular el promedio, que se actualize solo
+                            //Agregar validaciones
+
+                            do
                             {
-                                licencia = char.Parse(entradaLicencia.ToUpper());
-                                break;
-                            }
-                            else if (entradaLicencia == "N/A")
+                                Console.Write("Ingrese cantidad de entregas: ");
+
+                                if (int.TryParse(Console.ReadLine(), out entregas) && entregas >= 0)
+                                {
+                                    break;
+                                }
+
+                                MensajeError("Cantidad de entregas debe ser un número entero");
+
+                            } while (true);
+
+
+
+                            Repartidor repartidor = new Repartidor(GenerarID(), nombre, numeroTelefono, licencia, disponibilidad, entregas, 0);
+
+                            repartidorValido = ValidarRepartidor(repartidor, nombre, numeroTelefono, licencia, entregas);
+
+                            if (repartidorValido)
                             {
-                                licencia = 'N';
-                                break;
+                                repartidores.Add(repartidor);
+                                MensajeExito("Repartidor agregado ");
                             }
-                            else if (string.IsNullOrEmpty(entradaLicencia))
-                            {
-                                MensajeError("Licencia no puede estar vacía");
-                            }
-                            else
-                            {
-                                MensajeError("Opción de licencia no válida");
-                            }
-
-                        }
-                        while (true);
-                        //Agregar una forma de calcular el promedio, que se actualize solo
-                        //Agregar validaciones
-
-                        do
-                        {
-                            Console.Write("Ingrese cantidad de entregas: ");
-
-                            if (int.TryParse(Console.ReadLine(), out entregas) && entregas >= 0)
-                            {
-                                break;
-                            }
-
-                            MensajeError("Cantidad de entregas debe ser un número entero");
-
-                        } while (true);
-
-
-
-                        Repartidor repartidor = new Repartidor(GenerarID(), nombre, numeroTelefono, licencia, disponibilidad, entregas, 0);
-
-                      bool  repartidorValido = ValidarRepartidor(repartidor, nombre, numeroTelefono, licencia, entregas);
-
-                        if (repartidorValido)
-                        {
-                            repartidores.Add(repartidor);
-                            MensajeExito("Repartidor agregado ");
-                        }
+                        } while (!repartidorValido);
                 
-                Pausa();
-                MenuRepartidor();
+                    Pausa();
+                    MenuRepartidor();
                 break;
                   
                     case 2:
@@ -1162,50 +1162,139 @@ namespace Proyectco_01_s2
                         MenuRepartidor();
                         break;
                     case 3:
-                        int codigo;
-                        do
+                        int codigo; 
+                        if (repartidores.Count == 0)
                         {
-                            Console.ResetColor();
-                            foreach (Repartidor objeto in repartidores)
-                            {
-                                objeto.MostrarInformacion();
-                                Console.WriteLine();
-                            }
-                            Console.WriteLine("Seleccione el codigo del repartidor:");
-                            if (!int.TryParse(Console.ReadLine(), out codigo))
-                            {
-                                Console.BackgroundColor = ConsoleColor.DarkRed;
-                                Console.WriteLine("ingrese el codigo solo con numeros");
-                            }
-                            else { break; }
-                        } while (true);
-                        int posicion = repartidores.FindIndex(p => p.Codigo == codigo);
-                        if (posicion == -1)
-                        {
-                            MensajeError("No existe un repartidor con ese código");
+                            MensajeError("No se han ingresado datos de repartidores");
                             Pausa();
-                            MenuRepartidor();
-                            break;
                         }
-                        Console.WriteLine("Ingresa el Nuevo nombre:");
-                        nombre = Console.ReadLine();
-                        Console.WriteLine("Ingrese el nuevo numero de telefono:");
-                        numeroTelefono = Console.ReadLine();
-                        Console.WriteLine("Ingrese la nueva licencia:");
-                        //validar entrada
-                        licencia = char.Parse(Console.ReadLine());
-                        //implementar las validaciones
+                        else
+                        {
+                            do
+                            {
+                                Console.ResetColor();
+                                foreach (Repartidor objeto in repartidores)
+                                {
+                                    objeto.MostrarInformacion();
+                                    Console.WriteLine();
+                                }
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.Write("Seleccione el codigo del repartidor: ");
+                                Console.ResetColor();
+                                if (!int.TryParse(Console.ReadLine(), out codigo))
+                                {
+                                    MensajeError("Ingrese el codigo solo con numeros.");
+                                }
+                                else { break; }
+                            } while (true);
+                            int posicion = repartidores.FindIndex(p => p.Codigo == codigo);
+                            if (posicion == -1)
+                            {
+                                MensajeError("No existe un repartidor con ese código");
+                                Pausa();
+                                MenuRepartidor();
+                                break;
+                            }
+                            do
+                            {
+                                do
+                                {
+                                    Console.Write("Ingrese el nuevo nombre: ");
+                                    nombre = Console.ReadLine();
+                                    if (!string.IsNullOrEmpty(nombre))
+                                    {
+                                        break;
+                                    }
+                                    MensajeError("El nombre no puede estar vacío");
+                                } while (true);
 
-                        repartidores[posicion].Nombre = nombre;
-                        repartidores[posicion].NumeroTelefono = numeroTelefono;
-                        repartidores[posicion].TipoLicencia = licencia;
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Datos actualizados");
+
+                                do
+                                {
+                                    Console.Write("Ingrese el nuevo número de teléfono: ");
+                                    numeroTelefono = Console.ReadLine();
+                                    if (string.IsNullOrEmpty(numeroTelefono))
+                                    {
+                                        MensajeError("Número de teléfono no puede estar vacío");
+                                    }
+                                    else if (numeroTelefono.Length != 8)
+                                    {
+                                        MensajeError("Número de teléfono debe tener exactamente 8 dígitos");
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                } while (true);
+                                do
+                                {
+                                    Console.WriteLine("Ingrese el tipo de licencia:");
+                                    OpcionMenu("A", "Licencia tipo A", ConsoleColor.Yellow);
+                                    OpcionMenu("B", "Licencia tipo B", ConsoleColor.Yellow);
+                                    OpcionMenu("C", "Licencia tipo C", ConsoleColor.Yellow);
+                                    OpcionMenu("M", "Licencia tipo M", ConsoleColor.Yellow);
+                                    OpcionMenu("N/A", "No aplica", ConsoleColor.Yellow);
+                                    Console.WriteLine();
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("Seleccione una opción: ");
+                                    Console.ResetColor();
+                                    string entradaLicencia = Console.ReadLine().ToUpper().Trim();
+
+                                    if (entradaLicencia == "A" || entradaLicencia == "B" || entradaLicencia == "C" || entradaLicencia == "M")
+                                    {
+                                        licencia = char.Parse(entradaLicencia.ToUpper());
+                                        break;
+                                    }
+                                    else if (entradaLicencia == "N/A")
+                                    {
+                                        licencia = 'N';
+                                        break;
+                                    }
+                                    else if (string.IsNullOrEmpty(entradaLicencia))
+                                    {
+                                        MensajeError("Licencia no puede estar vacía");
+                                    }
+                                    else
+                                    {
+                                        MensajeError("Opción de licencia no válida");
+                                    }
+
+                                }
+                                while (true);
+                                //Agregar una forma de calcular el promedio, que se actualize solo
+                                //Agregar validaciones
+
+                                do
+                                {
+                                    Console.Write("Ingrese la nueva cantidad de entregas: ");
+
+                                    if (int.TryParse(Console.ReadLine(), out entregas) && entregas >= 0)
+                                    {
+                                        break;
+                                    }
+
+                                    MensajeError("Cantidad de entregas debe ser un número entero");
+
+                                } while (true);
+
+                                repartidores[posicion].Nombre = nombre;
+                                repartidores[posicion].NumeroTelefono = numeroTelefono;
+                                repartidores[posicion].TipoLicencia = licencia;
+
+                                repartidorValido = ValidarRepartidor(repartidores[posicion], nombre, numeroTelefono, licencia, entregas);
+
+                            } while (!repartidorValido);
+
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Datos actualizados");
+                            Pausa();
+                        }
                         MenuRepartidor();
                         break;
                     case 4:
                         //nose agregar un metodo para cambiar la disponibilidad
                         Console.WriteLine("Se modigicara eso pronto...");
+                        Pausa();
                         MenuRepartidor();
                         break;
                     case 5:
@@ -1219,9 +1308,9 @@ namespace Proyectco_01_s2
                         break;
                 }
             }
-            void MenuTipoVehiculo()
+            void MenuTipoVehiculo(int nuevo)
             {
-                string placaVehiculo, marcaVehiculo, modeloVehiculo;
+                string placaVehiculo = "", marcaVehiculo, modeloVehiculo;
                 double capacidadCargaVehiculo, costoVehiculo;
                 Vehiculo.estadoVehiculo estado;
                 int opcionVehiculo;
@@ -1267,16 +1356,19 @@ namespace Proyectco_01_s2
                     }
                     else
                     { 
-                    do
-                    {
-                        Console.Write("Ingrese la placa del vehiculo: ");
-                        placaVehiculo = Console.ReadLine();
-                        if (!string.IsNullOrEmpty(placaVehiculo))
+                        if(nuevo == -1)
                         {
-                            break;
+                            do
+                            {
+                                Console.Write("Ingrese la placa del vehiculo: ");
+                                placaVehiculo = Console.ReadLine();
+                                if (!string.IsNullOrEmpty(placaVehiculo))
+                                {
+                                    break;
+                                }
+                                MensajeError("La placa no puede estar vacía");
+                            } while (true);
                         }
-                        MensajeError("La placa no puede estar vacía");
-                    } while (true);
 
                     do
                     {
@@ -1360,31 +1452,47 @@ namespace Proyectco_01_s2
 
                     } while (true);
 
-                    Vehiculo vehiculo;
+                        if (nuevo == -1)
+                        {
+                            Vehiculo vehiculo;
 
-                    if (opcionVehiculo == 1)
-                    {
-                        vehiculo = new Bicicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
-                    }
-                    else if (opcionVehiculo == 2)
-                    {
-                        vehiculo = new Motocicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
-                    }
-                    else
-                    {
-                        vehiculo = new Automovil(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                            if (opcionVehiculo == 1)
+                            {
+                                vehiculo = new Bicicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                            }
+                            else if (opcionVehiculo == 2)
+                            {
+                                vehiculo = new Motocicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                            }
+                            else
+                            {
+                                vehiculo = new Automovil(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                            }
+
+                            vehiculoValido = ValidarVehiculo(vehiculo, placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+
+                            if (vehiculoValido)
+                            {
+                                vehiculos.Add(vehiculo);
+                                MensajeExito("Vehículo agregado ");
+                            }
+                            Pausa();
+                            MenuVehiculo();
+                        }
+                        else
+                        {
+
+                            vehiculos[nuevo].Marca = marcaVehiculo;
+                            vehiculos[nuevo].Modelo = modeloVehiculo;
+                            vehiculos[nuevo].CapacidadCarga = capacidadCargaVehiculo;
+                            vehiculos[nuevo].Estado = estado;
+                            vehiculos[nuevo].Costo = costoVehiculo;
+
+                            vehiculoValido = ValidarVehiculo(vehiculos[nuevo], vehiculos[nuevo].Placa, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+
+                        }
                     }
 
-                    vehiculoValido = ValidarVehiculo(vehiculo, placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
-
-                    if (vehiculoValido)
-                    {
-                        vehiculos.Add(vehiculo);
-                        MensajeExito("Vehículo agregado ");
-                    }
-                }
-                    Pausa();
-                    MenuVehiculo();
                 } while (!vehiculoValido) ; 
                
             }
@@ -1393,10 +1501,6 @@ namespace Proyectco_01_s2
 
             void MenuVehiculo()
             {
-                char licencia;
-                bool disponibilidad = true;
-                int entregas = 0;
-                double calificacionPromedio, calificacion = 0;
 
                 do
                 {
@@ -1434,7 +1538,7 @@ namespace Proyectco_01_s2
                 {
 
                     case 1:
-                        MenuTipoVehiculo();
+                        MenuTipoVehiculo(-1);
                         break;
                     case 2:
                         if (vehiculos.Count == 0)
@@ -1455,26 +1559,38 @@ namespace Proyectco_01_s2
                         MenuVehiculo();
                         break;
                     case 3:
-                        int codigo;
-                        do
+                        string codigo;
+                        if (vehiculos.Count == 0)
                         {
-                            Console.ResetColor();
-                            foreach (Vehiculo objeto in vehiculos)
+                            MensajeError("No se han ingresado datos de vehículos");
+                        }
+                        else
+                        {
+                           
+                                Console.ResetColor();
+                                foreach (Vehiculo objeto in vehiculos)
+                                {
+                                    objeto.MostrarInformacion();
+                                    Console.WriteLine();
+                                }
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.Write("Seleccione la placa del vehiculo: ");
+                                Console.ResetColor();
+                                codigo = Console.ReadLine();
+
+                            int posicion = vehiculos.FindIndex(p => p.Placa == codigo);
+                            if (posicion == -1)
                             {
-                                objeto.MostrarInformacion();
-                                Console.WriteLine();
+                                MensajeError("No existe un vehiculo con esa placa");
+                                Pausa();
+                                MenuVehiculo();
+                                break;
                             }
-                            Console.WriteLine("Seleccione el codigo del vehiculo:");
-                            if (!int.TryParse(Console.ReadLine(), out codigo))
-                            {
-                                MensajeError("Ingrese un valor numerico");
-                            }
-                            else { break; }
-                        } while (true);
-                       
-                        // hacer la mrd de ver vehiculol
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Datos actualizados");
+                            MenuTipoVehiculo(posicion);
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("Datos actualizados");
+                        }
+                        Pausa();
                         MenuVehiculo();
                         break;
                     case 4:
