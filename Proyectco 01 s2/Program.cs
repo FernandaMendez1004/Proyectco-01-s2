@@ -402,12 +402,12 @@ namespace Proyectco_01_s2
 
             public virtual void MostrarInformacion()
             {
-                Console.WriteLine("Placa: " + Placa);
-                Console.WriteLine("Marca: " + Marca);
-                Console.WriteLine("Modelo: " + Modelo);
-                Console.WriteLine("Capacidad de Carga: " + CapacidadCarga);
-                Console.WriteLine("Estado: " + Estado);
-                Console.WriteLine("Costo: " + Costo);
+                Console.Write("Placa: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Placa); Console.ResetColor();
+                Console.Write("Marca: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Marca);Console.ResetColor();
+                Console.Write("Modelo: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Modelo);Console.ResetColor();
+                Console.Write("Capacidad de Carga: ");  Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(CapacidadCarga); Console.ResetColor();
+                Console.Write("Estado: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Estado); Console.ResetColor();
+                Console.Write("Costo: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Costo); Console.ResetColor();
             }
 
             public virtual void CalcularPrecio()
@@ -1382,7 +1382,7 @@ namespace Proyectco_01_s2
                             }
                             Pausa();
                         }
-                        MenuRepartidor();
+                        
                         MenuVehiculo();
                         break;
                     case 3:
