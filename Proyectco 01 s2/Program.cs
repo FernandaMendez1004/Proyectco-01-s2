@@ -413,13 +413,7 @@ namespace Proyectco_01_s2
             public virtual void CalcularPrecio()
             { }
 
-            public Vehiculo(
-     string placa,
-     string marca,
-     string modelo,
-     double capacidadCarga,
-     estadoVehiculo estado,
-     double costo)
+            public Vehiculo(string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo)
             {
                 Placa = placa;
                 Marca = marca;
@@ -482,6 +476,9 @@ namespace Proyectco_01_s2
 
         static void Main(string[] args)
         {
+            Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
+
             //variables
             int opcion;
             string nombre, numeroTelefono;
@@ -522,19 +519,15 @@ namespace Proyectco_01_s2
 
             void MensajeExito(string mensaje)
             {
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.BackgroundColor = ConsoleColor.Green;
-                Console.WriteLine();
-                Console.WriteLine("  ✓ " + mensaje);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("  ✓ CORRECTO:  " + mensaje);
                 Console.ResetColor();
             }
 
             void MensajeError(string mensaje)
             {
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine();
-                Console.WriteLine("  X ERROR: " + mensaje);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("  ✘ ERROR:  " + mensaje);
                 Console.ResetColor();
             }
 
@@ -553,10 +546,11 @@ namespace Proyectco_01_s2
                 {
                     Titulo("X E L A D R I V E R", ConsoleColor.DarkBlue);
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("                         SISTEMA DE GESTIÓN DE ENTREGAS");
+                    Console.WriteLine();
+                    Console.WriteLine("                                 SISTEMA DE GESTIÓN DE ENTREGAS");
                     Console.ResetColor();
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
 
                     OpcionMenu("1", "Gestión de Clientes", ConsoleColor.Blue);
@@ -572,7 +566,7 @@ namespace Proyectco_01_s2
                     OpcionMenu("8", "Salir", ConsoleColor.DarkRed);
 
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("Seleccione una opción: ");
                     Console.ResetColor();
@@ -636,7 +630,8 @@ namespace Proyectco_01_s2
                         default:
                             MensajeError("La opción seleccionada no existe.");
                             Pausa();
-                            break;
+                        MenuPrincipal();
+                        break;
                 }
             }
             int GenerarID()
@@ -653,15 +648,63 @@ namespace Proyectco_01_s2
                 return NuevoID;
             }
 
-             bool ValidarCliente  (Cliente objeto)
+            bool ValidarCliente(Cliente objeto, string nombrec, string telefono, string correo, string direccion)
             {
-                do
+                if (objeto.Nombre != nombrec)
                 {
-                    if (objeto.Nombre != nombre)
-                    {
-                        
-                    }
+                    MensajeError("El nombre ingresado no es válido.");
+                    return false;
                 }
+
+                if (objeto.NumeroTelefono != telefono)
+                {
+                    MensajeError("El número de teléfono ingresado no es válido.");
+                    return false;
+                }
+
+                if (objeto.CorreoElectronico != correo)
+                {
+                    MensajeError("El correo electrónico ingresado no es válido.");
+                    return false;
+                }
+
+                if (objeto.Direccion != direccion)
+                {
+                    MensajeError("La dirección ingresada no es válida.");
+                    return false;
+                }
+
+                return true;
+            }
+
+
+            bool ValidarRepartidor(Repartidor objeto, string nombrer, string telefono, char tipoLicencia,  int entregas)
+            {
+                if (objeto.Nombre != nombrer)
+                {
+                    MensajeError("El nombre ingresado no es válido.");
+                    return false;
+                }
+
+                if (objeto.NumeroTelefono != telefono)
+                {
+                    MensajeError("El número de teléfono ingresado no es válido.");
+                    return false;
+                }
+
+                if (objeto.TipoLicencia != tipoLicencia)
+                {
+                    MensajeError("El tipo de licencia ingresado no es válido.");
+                    return false;
+                }
+
+                if (objeto.CantidadEntregas != entregas)
+                {
+                    MensajeError("La cantidad de entregas ingresada no es válida.");
+                    return false;
+                }
+
+                return true;
             }
 
             void MenuClientes()
@@ -670,9 +713,10 @@ namespace Proyectco_01_s2
 
                 do
                 {
+
                     Titulo("MENÚ CLIENTES", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
 
                     OpcionMenu("1", "Agregar nuevo cliente", ConsoleColor.Magenta);
@@ -681,11 +725,12 @@ namespace Proyectco_01_s2
                     OpcionMenu("4", "Regresar", ConsoleColor.Magenta);
 
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("Seleccione una opción: ");
                     Console.ResetColor();
-
+                    
+                    
                     if (!int.TryParse(Console.ReadLine(), out opcion))
                     {
                         Console.BackgroundColor = ConsoleColor.DarkRed;
@@ -698,35 +743,99 @@ namespace Proyectco_01_s2
                         break;
                     }
                 } while (true);
+                
                 switch (opcion)
                 {
                     
                     case 1:
-                        Console.WriteLine("Ingresa el nombre:");
-                        nombre = Console.ReadLine();
-                        Console.WriteLine("Ingrese el numero de telefono:");
-                        numeroTelefono = Console.ReadLine();
-                        Console.WriteLine("Ingrese el correo electronico:");
-                        correo = Console.ReadLine();
-                        Console.WriteLine("Ingrese la direccion:");
-                        direccion = Console.ReadLine();
+                        bool clienteValido = false;
+                        do
+                        {
+                            do
+                            {
+                                Console.Write("Ingrese el nombre: ");
+                                nombre = Console.ReadLine();
+                                if (!string.IsNullOrEmpty(nombre))
+                                {
+                                    break;
+                                }
+                                MensajeError("El nombre no puede estar vacío");
+                            } while (true);
 
-                        //Agregar validaciones
+                            do
+                            {
+                                Console.Write("Ingrese el número de teléfono: ");
+                                numeroTelefono = Console.ReadLine();
+                                if (string.IsNullOrEmpty(numeroTelefono))
+                                {
+                                    MensajeError("Número de teléfono no puede estar vacío");
+                                }
+                                else if (numeroTelefono.Length != 8)
+                                {
+                                    MensajeError("Número de teléfono debe tener exactamente 8 dígitos");
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            } while (true);
 
-                        Cliente cliente = new Cliente(GenerarID(), nombre, numeroTelefono, correo, direccion, 1);
-                        clientes.Add(cliente);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Cliente agregado");
-                        Console.ResetColor();
+                            do
+                            {
+                                Console.Write("Ingrese el correo electrónico: ");
+                                correo = Console.ReadLine();
+                                if (!string.IsNullOrEmpty(correo))
+                                {
+                                    break;
+                                }
+                                MensajeError("El correo no puede estar vacío");
+                            } while (true);
+
+                            do
+                            {
+                                Console.Write("Ingrese la dirección: ");
+                                direccion = Console.ReadLine();
+
+                                if (!string.IsNullOrEmpty(direccion))
+                                {
+                                    break;
+                                }
+
+                                MensajeError("La dirección no puede estar vacio");
+
+                            } while (true);
+
+
+                            //Agregar validaciones
+
+                            Cliente cliente = new Cliente(GenerarID(), nombre, numeroTelefono, correo, direccion, 1);
+
+                            clienteValido = ValidarCliente(cliente, nombre, numeroTelefono, correo, direccion);
+
+                            if (clienteValido)
+                            {
+                                clientes.Add(cliente);
+                                MensajeExito("Cliente agregado ");
+                            }
+                        } while (!clienteValido);
+                        Pausa();
                         MenuClientes();
                         break;
                     case 2:
-                        foreach (Cliente objeto in clientes)
+                        if (clientes.Count == 0)
                         {
-                            objeto.MostrarInformacion();
-                            Console.WriteLine();
+                            MensajeError("No se han ingresado datos de clientes");
+                            Pausa();
                         }
-                        Console.ReadKey();
+                        else
+                        {
+                            foreach (Cliente objeto in clientes)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                            Pausa();
+                        }
                         MenuClientes();
                         break;
                     case 3:
@@ -747,6 +856,13 @@ namespace Proyectco_01_s2
                             else { break; }
                         } while (true);
                         int posicion = clientes.FindIndex(p => p.Codigo == codigo);
+                        if (posicion == -1)
+                        {
+                            MensajeError("No existe un cliente con ese código");
+                            Pausa();
+                            MenuClientes();
+                            break;
+                        }
                         Console.WriteLine("Ingresa el Nuevo nombre:");
                         nombre = Console.ReadLine();
                         Console.WriteLine("Ingrese el nuevo numero de telefono:");
@@ -770,10 +886,8 @@ namespace Proyectco_01_s2
                         break;
                     default:
                         Console.ResetColor();
-                        Console.BackgroundColor = ConsoleColor.DarkRed;
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.WriteLine("Opcion invalida");
-                        Console.ResetColor();
+                        MensajeError("La opcion seleeccionada no es valida.");
+                        Pausa();
                         MenuClientes();
                         break;
                 }
@@ -789,7 +903,7 @@ namespace Proyectco_01_s2
                 {
                     Titulo("MENÚ REPARTIDORES", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
 
                     OpcionMenu("1", "Agregar nuevo repartidor", ConsoleColor.Magenta);
@@ -799,7 +913,7 @@ namespace Proyectco_01_s2
                     OpcionMenu("5", "Regresar", ConsoleColor.Magenta);
 
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("Seleccione una opción: ");
                     Console.ResetColor();
@@ -821,29 +935,115 @@ namespace Proyectco_01_s2
                 {
 
                     case 1:
-                        Console.WriteLine("Ingresa el nombre:");
-                        nombre = Console.ReadLine();
-                        Console.WriteLine("Ingrese el numero de telefono:");
-                        numeroTelefono = Console.ReadLine();
-                        Console.WriteLine("Ingrese el tipo de licencia:");
-                        // validar entrada
-                        licencia = char.Parse(Console.ReadLine());
+                       do { 
+                        Console.Write("Ingrese el nombre: ");
+                            nombre = Console.ReadLine();
+                            if (!string.IsNullOrEmpty(nombre))
+                            {
+                                break;
+                            }
+                            MensajeError("El nombre no puede estar vacío");
+                        } while (true);
+
+
+                        do
+                        {
+                            Console.Write("Ingrese el número de teléfono: ");
+                            numeroTelefono = Console.ReadLine();
+                            if (string.IsNullOrEmpty(numeroTelefono))
+                            {
+                                MensajeError("Número de teléfono no puede estar vacío");
+                            }
+                            else if (numeroTelefono.Length != 8)
+                            {
+                                MensajeError("Número de teléfono debe tener exactamente 8 dígitos");
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        } while (true);
+                        do
+                        {
+                            Console.WriteLine("Ingrese el tipo de licencia:");
+                            OpcionMenu("A", "Licencia tipo A", ConsoleColor.Yellow);
+                            OpcionMenu("B", "Licencia tipo B", ConsoleColor.Yellow);
+                            OpcionMenu("C", "Licencia tipo C", ConsoleColor.Yellow);
+                            OpcionMenu("M", "Licencia tipo M", ConsoleColor.Yellow);
+                            OpcionMenu("N/A", "No aplica", ConsoleColor.Yellow);
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("Seleccione una opción: ");
+                            Console.ResetColor();
+                            string entradaLicencia = Console.ReadLine().ToUpper().Trim();
+
+                            if (entradaLicencia == "A" || entradaLicencia == "B" || entradaLicencia == "C" || entradaLicencia == "M")
+                            {
+                                licencia = char.Parse(entradaLicencia.ToUpper());
+                                break;
+                            }
+                            else if (entradaLicencia == "N/A")
+                            {
+                                licencia = 'N';
+                                break;
+                            }
+                            else if (string.IsNullOrEmpty(entradaLicencia))
+                            {
+                                MensajeError("Licencia no puede estar vacía");
+                            }
+                            else
+                            {
+                                MensajeError("Opción de licencia no válida");
+                            }
+
+                        }
+                        while (true);
                         //Agregar una forma de calcular el promedio, que se actualize solo
                         //Agregar validaciones
-                        Repartidor repartidor = new Repartidor(GenerarID(), nombre, numeroTelefono, licencia, disponibilidad, entregas, 0);
-                        repartidores.Add(repartidor);
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Repartidor agregado");
-                        Console.ResetColor();
-                        MenuRepartidor();
-                        break;
-                    case 2:
-                        foreach (Repartidor objeto in repartidores)
+
+                        do
                         {
-                            objeto.MostrarInformacion();
-                            Console.WriteLine();
+                            Console.Write("Ingrese cantidad de entregas: ");
+
+                            if (int.TryParse(Console.ReadLine(), out entregas) && entregas >= 0)
+                            {
+                                break;
+                            }
+
+                            MensajeError("Cantidad de entregas debe ser un número entero");
+
+                        } while (true);
+
+
+
+                        Repartidor repartidor = new Repartidor(GenerarID(), nombre, numeroTelefono, licencia, disponibilidad, entregas, 0);
+
+                      bool  repartidorValido = ValidarRepartidor(repartidor, nombre, numeroTelefono, licencia, entregas);
+
+                        if (repartidorValido)
+                        {
+                            repartidores.Add(repartidor);
+                            MensajeExito("Repartidor agregado ");
                         }
-                        Console.ReadKey();
+                
+                Pausa();
+                MenuRepartidor();
+                break;
+                  
+                    case 2:
+                        if (repartidores.Count == 0)
+                        {
+                            MensajeError("No se han ingresado datos de repartidores");
+                            Pausa();
+                        }
+                        else
+                        {
+                            foreach (Repartidor objeto in repartidores)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                            Pausa();}
                         MenuRepartidor();
                         break;
                     case 3:
@@ -865,6 +1065,13 @@ namespace Proyectco_01_s2
                             else { break; }
                         } while (true);
                         int posicion = repartidores.FindIndex(p => p.Codigo == codigo);
+                        if (posicion == -1)
+                        {
+                            MensajeError("No existe un repartidor con ese código");
+                            Pausa();
+                            MenuRepartidor();
+                            break;
+                        }
                         Console.WriteLine("Ingresa el Nuevo nombre:");
                         nombre = Console.ReadLine();
                         Console.WriteLine("Ingrese el nuevo numero de telefono:");
@@ -911,7 +1118,7 @@ namespace Proyectco_01_s2
                 {
                     Titulo("MENÚ VEHICULO", ConsoleColor.DarkMagenta);
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.WriteLine();
 
                     OpcionMenu("1", "Agregar nuevo vehiculo", ConsoleColor.Magenta);
@@ -920,7 +1127,7 @@ namespace Proyectco_01_s2
                     OpcionMenu("4", "Regresar", ConsoleColor.Magenta);
 
                     Console.WriteLine();
-                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("Seleccione una opción: ");
                     Console.ResetColor();
