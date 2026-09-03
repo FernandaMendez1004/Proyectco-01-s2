@@ -257,6 +257,30 @@ namespace Proyectco_01_s2
                 }
             }
 
+            public virtual void MostrarInformacion()
+            {
+                Console.Write("Código: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Codigo);
+                Console.ResetColor();
+
+                Console.Write("Propietario: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Propietario.Nombre);
+                Console.ResetColor();
+
+                Console.Write("Descripción: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Descripcion);
+                Console.ResetColor();
+
+                Console.Write("Peso: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Peso);
+                Console.ResetColor();
+
+                Console.Write("Valor Declarado: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(ValorDeclarado);
+                Console.ResetColor();
+
+                Console.Write("Dirección de Origen: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(DireccionOrigen);
+                Console.ResetColor();
+
+                Console.Write("Dirección de Destino: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(DireccionDestino);
+                Console.ResetColor();
+            }
+
             public virtual void CalcularDistancia(string Origen, string Destino)
             {
                 // no sabemos ni vrga
@@ -593,8 +617,7 @@ namespace Proyectco_01_s2
                             break;
 
                         case 4:
-                            MensajeError("Módulo en desarrollo.");
-                            Pausa();
+                            MenuPaquete();
                             break;
 
                         case 5:
@@ -613,11 +636,8 @@ namespace Proyectco_01_s2
                             break;
 
                         case 8:
-
                             Console.Clear();
-
                             Console.ForegroundColor = ConsoleColor.Green;
-
                             Console.WriteLine();
                             Console.WriteLine(@"             
                                                  Gracias por utilizar XelaDriver
@@ -630,8 +650,8 @@ namespace Proyectco_01_s2
                         default:
                             MensajeError("La opción seleccionada no existe.");
                             Pausa();
-                        MenuPrincipal();
-                        break;
+                            MenuPrincipal();
+                            break;
                 }
             }
             int GenerarID()
@@ -750,7 +770,47 @@ namespace Proyectco_01_s2
                 return true;
              }
 
-                
+            bool ValidarPaquete(Paquete objeto, Cliente propietario, string descripcion, double peso, double valorDeclarado, string origen, string destino)
+            {
+                if (objeto.Propietario != propietario)
+                {
+                    MensajeError("El propietario ingresado no es valido");
+                    return false;
+                }
+
+                if (objeto.Descripcion != descripcion)
+                {
+                    MensajeError("La descripción ingresada no es válida");
+                    return false;
+                }
+
+                if (objeto.Peso != peso)
+                {
+                    MensajeError("El peso ingresado no es válido");
+                    return false;
+                }
+
+                if (objeto.ValorDeclarado != valorDeclarado)
+                {
+                    MensajeError("El valor declarado no es válido");
+                    return false;
+                }
+
+                if (objeto.DireccionOrigen != origen)
+                {
+                    MensajeError("La dirección de origen no es válida");
+                    return false;
+                }
+
+                if (objeto.DireccionDestino != destino)
+                {
+                    MensajeError("La dirección de destino no es válida");
+                    return false;
+                }
+
+                return true;
+            }
+
             void MenuClientes()
             {
                 string correo, direccion;
@@ -1602,6 +1662,316 @@ namespace Proyectco_01_s2
                         Pausa();
                         MensajeError("La opción seleccionada no existe");
                         MenuVehiculo();
+                        break;
+                }
+            }
+
+            void MenuTipoPaquete(int nuevo)
+            {
+                Cliente propietario = null;
+                string descripcion, origen, destino;
+                double peso, valorDeclarado;
+                int opcionPaquete;
+                bool paqueteValido = false;
+
+                do
+                {
+                    do
+                    {
+                        Titulo("TIPO DE  PAQUETE", ConsoleColor.DarkGreen);
+                        Console.WriteLine();
+                        OpcionMenu("1", "Documento", ConsoleColor.Green);
+                        OpcionMenu("2", "Estándar", ConsoleColor.Green);
+                        OpcionMenu("3", "Frágil", ConsoleColor.Green);
+                        Console.WriteLine();
+                        OpcionMenu("4", "Regresar", ConsoleColor.DarkRed);
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("Seleccione una opción: ");
+                        Console.ResetColor();
+
+
+                        if (!int.TryParse(Console.ReadLine(), out opcionPaquete))
+                        {
+                            MensajeError("Ingrese una opción válida");
+                            Pausa();
+                        }
+                        else if (opcionPaquete < 1 || opcionPaquete > 4)
+                        {
+                            MensajeError("La opción seleccionada no existe");
+                            Pausa();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    } while (true);
+
+
+                    if (opcionPaquete == 4)
+                    {
+                        MenuPaquete();
+                    }
+                    else
+                    {
+                        Console.WriteLine("      CLIENTES DISPONIBLES:      ");
+                        foreach (Cliente cliente in clientes)
+                        {
+                            cliente.MostrarInformacion();
+                            Console.WriteLine();
+                        }
+
+                        int codigoCliente;
+                        do
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("Ingrese el codigo del propietario: ");
+                            Console.ResetColor();
+                            if (!int.TryParse(Console.ReadLine(), out codigoCliente))
+                            {
+                                MensajeError("Ingrese un código válido.");
+                            }
+                            else
+                            {
+                                propietario = clientes.Find(c => c.Codigo == codigoCliente);
+                                if (propietario == null)
+                                {
+                                    MensajeError("No existe un cliente con ese código.");
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+
+                        } while (true);
+
+                        do
+                        {
+                            Console.Write("Ingrese la descripción del paquete: ");
+                            descripcion = Console.ReadLine();
+                            if (!string.IsNullOrEmpty(descripcion))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                MensajeError("La descripción no puede estar vacía.");
+                            }                           
+                        } while (true);
+
+                        do
+                        {
+                            Console.Write("Ingrese el peso del paquete: ");
+                            if (!double.TryParse(Console.ReadLine(), out peso))
+                            {
+                                MensajeError("Ingrese un valor numérico válido.");
+                            }
+                            else if (peso <= 0)
+                            {
+                                MensajeError("El peso debe ser mayor a cero.");
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        } while (true);
+
+                        do
+                        {
+                            Console.Write("Ingrese el valor declarado: ");
+                            if (!double.TryParse(Console.ReadLine(), out valorDeclarado))
+                            {
+                                MensajeError("Ingrese un valor numérico válido.");
+                            }
+                            else if (valorDeclarado <= 0)
+                            {
+                                MensajeError("El valor debe ser mayor a cero.");
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        } while (true);
+
+                        do
+                        {
+                            Console.Write("Ingrese la dirección de origen: ");
+                            origen = Console.ReadLine();
+
+                            if (!string.IsNullOrEmpty(origen))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                MensajeError("La dirección de origen no puede estar vacía.");
+                            }
+                        } while (true);
+
+                        do
+                        {
+                            Console.Write("Ingrese la dirección de destino: ");
+                            destino = Console.ReadLine();
+
+                            if (!string.IsNullOrEmpty(destino))
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                MensajeError("La dirección de destino no puede estar vacía.");
+                            }
+                        } while (true);
+
+                        if (nuevo == -1)
+                        {
+                            Paquete paquete;
+                            if (opcionPaquete == 1)
+                            {
+                                paquete = new Documento(GenerarID(), propietario, descripcion, peso, valorDeclarado, origen, destino);
+                            }
+                            else if (opcionPaquete == 2)
+                            {
+                                paquete = new Estandar(GenerarID(), propietario, descripcion, peso, valorDeclarado, origen, destino);
+                            }
+                            else
+                            {
+                                paquete = new Fragil(GenerarID(), propietario, descripcion, peso, valorDeclarado, origen, destino);
+                            }
+
+
+                            paqueteValido = ValidarPaquete(paquete, propietario, descripcion, peso, valorDeclarado, origen, destino);
+                            if (paqueteValido)
+                            {
+                                paquetes.Add(paquete);
+                                MensajeExito("Paquete agregado correctamente.");
+                            }
+                            Pausa();
+                            MenuPaquete();
+                        }
+                        else
+                        {
+                            paquetes[nuevo].Propietario = propietario;
+                            paquetes[nuevo].Descripcion = descripcion;
+                            paquetes[nuevo].Peso = peso;
+                            paquetes[nuevo].ValorDeclarado = valorDeclarado;
+                            paquetes[nuevo].DireccionOrigen = origen;
+                            paquetes[nuevo].DireccionDestino = destino;
+
+                            paqueteValido = ValidarPaquete(paquetes[nuevo], propietario, descripcion, peso, valorDeclarado, origen, destino);
+                        }
+                    }
+                } while (!paqueteValido);
+            }
+
+            void MenuPaquete()
+            {
+                do
+                {
+                    Titulo("MENÚ  PAQUETES", ConsoleColor.DarkGreen);
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine();
+                    OpcionMenu("1", "Agregar nuevo paquete", ConsoleColor.Green);
+                    OpcionMenu("2", "Consultar lista de paquetes", ConsoleColor.Green);
+                    OpcionMenu("3", "Actualizar paquete existente", ConsoleColor.Green);
+                    Console.WriteLine();
+                    OpcionMenu("4", "Regresar", ConsoleColor.DarkRed);
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Seleccione una opción: ");
+                    Console.ResetColor();
+
+                    if (!int.TryParse(Console.ReadLine(), out opcion))
+                    {
+                        MensajeError("Ingrese su opción utilizando números enteros.");
+                        Pausa();
+                    }
+                    else
+                    {
+                        break;
+                    }} while (true);
+
+                switch (opcion)
+                {
+                    case 1:
+                        MenuTipoPaquete(-1);
+                        break;
+
+                    case 2:
+                        if (paquetes.Count == 0)
+                        {
+                            MensajeError("No se han ingresado paquetes");
+                        }
+                        else
+                        {
+                            foreach (Paquete objeto in paquetes)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                        }
+                        Pausa();
+                        MenuPaquete();
+                        break;
+
+                    case 3:
+                        if (paquetes.Count == 0)
+                        {
+                            MensajeError("No se han ingresado paquetes.");
+                            Pausa();
+                            MenuPaquete();
+                            break;
+                        }
+                        Console.WriteLine();
+                        foreach (Paquete objeto in paquetes)
+                        {
+                            Console.WriteLine(
+                                "Código: " + objeto.Codigo +
+                                " | Descripción: " + objeto.Descripcion
+                            );
+                        }
+
+                        int codigoPaquete;
+                        do
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("Seleccione el código del paquete: ");
+                            Console.ResetColor();
+                            if (!int.TryParse(Console.ReadLine(), out codigoPaquete))
+                            {
+                                MensajeError("Ingrese un código válido.");
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        } while (true);
+
+                        int posicion = paquetes.FindIndex(p => p.Codigo == codigoPaquete);
+                        if (posicion == -1)
+                        {
+                            MensajeError("No existe un paquete con ese código.");
+                            Pausa();
+                            MenuPaquete();
+                            break;
+                        }
+                        MenuTipoPaquete(posicion);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Datos actualizados.");
+                        Pausa();
+                        MenuPaquete();
+                        break;
+
+                    case 4:
+                        MenuPrincipal();
+                        break;
+                     default:
+                        MensajeError("La opción seleccionada no existe.");
+                        Pausa();
+                        MenuPaquete();
                         break;
                 }
             }
