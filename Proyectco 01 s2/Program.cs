@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -222,7 +223,7 @@ namespace Proyectco_01_s2
             public double Peso
             {
                 get { return  peso; }
-                set { if (value > 0)
+                set { if (value > 0 && value <= 450)
                     { peso = value; }
                 }
             }
@@ -256,6 +257,14 @@ namespace Proyectco_01_s2
                     { direccionDestino = value; }
                 }
             }
+            private double costoPaquete;
+
+            public double CostoPaquete
+            {
+                get { return costoPaquete; }
+                set { costoPaquete = value; }
+            }
+
 
             public virtual void MostrarInformacion()
             {
@@ -287,8 +296,9 @@ namespace Proyectco_01_s2
             
             }
 
-            public virtual void CalcularTarifa (double Peso, double Valor)
-            { // no vrg
+            public virtual void CalcularTarifa ()
+            {
+                //en proceco CostoPaquete = ValorDeclarado + ()
             }
 
             public Paquete(int codigo, Cliente propietario, string descripcion, double peso, double valorDeclarado, string direccionOrigen, string direccionDestino)
@@ -317,7 +327,7 @@ namespace Proyectco_01_s2
                 {
                 }
 
-                public override void CalcularTarifa(double Peso, double Valor)
+                public override void CalcularTarifa()
                 {
                 }
                          
@@ -336,7 +346,7 @@ namespace Proyectco_01_s2
                 // no sabemos ni vrga
 
             }
-            public override void CalcularTarifa(double Peso, double Valor)
+            public override void CalcularTarifa()
             { // no vrg
             }
         }
@@ -353,7 +363,7 @@ namespace Proyectco_01_s2
                 // no sabemos ni vrga
 
             }
-            public override void CalcularTarifa(double Peso, double Valor)
+            public override void CalcularTarifa()
             { // no vrg
             }
         }
@@ -437,22 +447,21 @@ namespace Proyectco_01_s2
             public virtual void CalcularPrecio()
             { }
 
-            public Vehiculo(string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo)
+            public Vehiculo(string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado)
             {
                 Placa = placa;
                 Marca = marca;
                 Modelo = modelo;
                 CapacidadCarga = capacidadCarga;
                 Estado = estado;
-                Costo = costo;
             }
         }
         
          class Bicicleta : Vehiculo
             {
                 public Bicicleta(
-                    string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo) 
-                    : base(placa, marca, modelo, capacidadCarga, estado, costo)
+                    string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado) 
+                    : base(placa, marca, modelo, capacidadCarga, estado)
                 {
                 }
 
@@ -463,14 +472,16 @@ namespace Proyectco_01_s2
 
                 public override void CalcularPrecio()
                 {
+                double costoKilometro;
+                Costo = 15;
                 }
             }        
 
         class Motocicleta : Vehiculo
         {
         public Motocicleta(
-                    string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo)
-                    : base(placa, marca, modelo, capacidadCarga, estado, costo)
+                    string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado)
+                    : base(placa, marca, modelo, capacidadCarga, estado)
         {
         }
 
@@ -479,14 +490,14 @@ namespace Proyectco_01_s2
             base.MostrarInformacion();
         }
         public override void CalcularPrecio()
-            { }
+            { Costo = 25; }
         }
 
         class Automovil : Vehiculo
         {
         public Automovil(
-                string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado, double costo)
-                : base(placa, marca, modelo, capacidadCarga, estado, costo)
+                string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado)
+                : base(placa, marca, modelo, capacidadCarga, estado)
         {
         }
 
@@ -495,7 +506,126 @@ namespace Proyectco_01_s2
             base.MostrarInformacion();
         }
         public override void CalcularPrecio()
-            { }
+            { Costo = 30; }
+        }
+        class Pedido
+        {
+            private Cliente propietario;
+
+            public Cliente Propietario
+            {
+                get { return propietario; }
+                set { propietario = value; }
+            }
+            private Paquete encargo;
+
+            public Paquete Encargo
+            {
+                get { return encargo; }
+                set { encargo = value; }
+            }
+            private Vehiculo movil;
+
+            public Vehiculo Movil
+            {
+                get { return movil; }
+                set { movil = value; }
+            }
+            private Repartidor encargado;
+
+            public Repartidor Encargado
+            {
+                get { return encargado; }
+                set { encargado = value; }
+            }
+            private DateTime fecha;
+
+            public DateTime Fecha
+            {
+                get { return fecha; }
+                set { fecha = value; }
+            }
+            private double tarifa;
+
+            public double Tarifa
+            {
+                get { return tarifa; }
+                set { tarifa = value; }
+            }
+
+            public enum tipoServicio
+            {
+                Normal, Prioritario, Urgente
+            }
+            private tipoServicio servicio;
+
+            public tipoServicio Servicio
+            {
+                get { return servicio; }
+                set { if (Enum.IsDefined(typeof(tipoServicio), value))
+                    {
+                        servicio = value;
+                    }
+                }
+            }
+            private double descuento;
+
+            public double Descuento
+            {
+                get { return descuento; }
+                set { if (value < 0) {
+                        Console.WriteLine("No se puede ingresar datos negativos");    
+                    } else { descuento = value; }
+                }
+            }
+            private double recargo;
+
+            public double Recargo
+            {
+                get { return recargo; }
+                set {
+                    if (value < 0)
+                    {
+                        Console.WriteLine("No se puede ingresar datos negativos");
+                    }
+                    else { descuento = value; }
+                }
+            }
+            public enum estadoPedido
+            {
+                Bodega, Camino, Entregado
+            }
+            private estadoPedido pedidoEstado;
+
+            public estadoPedido PedidoEstado
+            {
+                get { return pedidoEstado; }
+                set {
+                    if (Enum.IsDefined(typeof(estadoPedido), value))
+                    {
+                        pedidoEstado = value;
+                    }
+                }
+            }
+            void MostrarInformacion()
+            {
+                Console.Write("Propietario: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Propietario.Nombre); Console.ResetColor();
+                Console.Write("Paquete: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Encargo.Descripcion); Console.ResetColor();
+                Console.Write("Vehiculo: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Movil.Marca); Console.ResetColor();
+                Console.Write("Repartidor encargado: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Encargado.Nombre); Console.ResetColor();
+                Console.Write("Fecha: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Fecha); Console.ResetColor();
+                Console.Write("Tarifa total: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Tarifa); Console.ResetColor();
+                Console.Write("Tipo de servicio: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Servicio); Console.ResetColor();
+                Console.Write("Estado del pedido: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(PedidoEstado); Console.ResetColor();
+            }
+            void CalcularTarifatotal()
+            {
+                //ver esto
+                Tarifa = Recargo - Descuento;
+            }
+
+
+
         }
 
         static void Main(string[] args)
@@ -617,8 +747,16 @@ namespace Proyectco_01_s2
                             break;
 
                         case 4:
-                            MenuPaquete();
-                            break;
+                            if(clientes.Count == 0)
+                            {
+                                MensajeError("No se han ingresado clientes");
+                                Pausa();
+                                MenuPrincipal();
+                            }else
+                            {
+                                MenuPaquete();
+                            }
+                        break;
 
                         case 5:
                             MensajeError("Módulo en desarrollo.");
@@ -729,7 +867,7 @@ namespace Proyectco_01_s2
 
            
 
-             bool ValidarVehiculo(Vehiculo objeto, string placa, string marca, string modelo, double capacidad, Vehiculo.estadoVehiculo estado, double costo)
+             bool ValidarVehiculo(Vehiculo objeto, string placa, string marca, string modelo, Vehiculo.estadoVehiculo estado)
             {
                 if (objeto.Placa != placa)
                 {
@@ -749,24 +887,11 @@ namespace Proyectco_01_s2
                     return false;
                 }
 
-                if (objeto.CapacidadCarga != capacidad)
-                {
-                    MensajeError("La capacidad de carga ingresada no es válida.");
-                    return false;
-                }
-
                 if (objeto.Estado != estado)
                 {
                     MensajeError("El estado ingresado no es válido.");
                     return false;
                 }
-
-                if (objeto.Costo != costo)
-                {
-                    MensajeError("El costo ingresado no es válido.");
-                    return false;
-                }
-
                 return true;
              }
 
@@ -1371,7 +1496,7 @@ namespace Proyectco_01_s2
             void MenuTipoVehiculo(int nuevo)
             {
                 string placaVehiculo = "", marcaVehiculo, modeloVehiculo;
-                double capacidadCargaVehiculo, costoVehiculo;
+                double capacidadCargaVehiculo;
                 Vehiculo.estadoVehiculo estado;
                 int opcionVehiculo;
                 bool vehiculoValido = false;
@@ -1452,22 +1577,6 @@ namespace Proyectco_01_s2
                         MensajeError("El modelo no puede estar vacío");
                     } while (true);
 
-                    do
-                    {
-                        Console.Write("Ingrese la capacidad de carga del vehiculo: ");
-                        if (!double.TryParse(Console.ReadLine(), out capacidadCargaVehiculo))
-                        {
-                            MensajeError("Ingrese un valor numérico válido para la capacidad de carga");
-                        }
-                        else if (capacidadCargaVehiculo <= 0)
-                        {
-                            MensajeError("La capacidad de carga debe ser mayor a cero");
-                        }
-                        else
-                        { break; }
-
-                    } while (true);
-
                     int opcionEstado;
 
 
@@ -1496,41 +1605,24 @@ namespace Proyectco_01_s2
                     } while (true);
                     estado = (Vehiculo.estadoVehiculo)(opcionEstado - 1);
 
-                    do
-                    {
-                        Console.Write("Ingrese el costo del vehiculo: ");
-                        if (!double.TryParse(Console.ReadLine(), out costoVehiculo))
-                        {
-                            MensajeError("Ingrese un valor numérico válido para el costo");
-                        }
-                        else if (costoVehiculo <= 0)
-                        {
-                            MensajeError("El costo debe ser mayor a cero");
-                        }
-                        else
-                        { break; }
-
-                    } while (true);
-
                         if (nuevo == -1)
                         {
                             Vehiculo vehiculo;
 
                             if (opcionVehiculo == 1)
                             {
-                                vehiculo = new Bicicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                                vehiculo = new Bicicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, 120, estado);
                             }
                             else if (opcionVehiculo == 2)
                             {
-                                vehiculo = new Motocicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                                vehiculo = new Motocicleta(placaVehiculo, marcaVehiculo, modeloVehiculo, 200, estado);
                             }
                             else
                             {
-                                vehiculo = new Automovil(placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                                vehiculo = new Automovil(placaVehiculo, marcaVehiculo, modeloVehiculo, 450, estado);
                             }
 
-                            vehiculoValido = ValidarVehiculo(vehiculo, placaVehiculo, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
-
+                            vehiculoValido = ValidarVehiculo(vehiculo, placaVehiculo, marcaVehiculo, modeloVehiculo, estado);
                             if (vehiculoValido)
                             {
                                 vehiculos.Add(vehiculo);
@@ -1544,11 +1636,9 @@ namespace Proyectco_01_s2
 
                             vehiculos[nuevo].Marca = marcaVehiculo;
                             vehiculos[nuevo].Modelo = modeloVehiculo;
-                            vehiculos[nuevo].CapacidadCarga = capacidadCargaVehiculo;
                             vehiculos[nuevo].Estado = estado;
-                            vehiculos[nuevo].Costo = costoVehiculo;
 
-                            vehiculoValido = ValidarVehiculo(vehiculos[nuevo], vehiculos[nuevo].Placa, marcaVehiculo, modeloVehiculo, capacidadCargaVehiculo, estado, costoVehiculo);
+                            vehiculoValido = ValidarVehiculo(vehiculos[nuevo], vehiculos[nuevo].Placa, marcaVehiculo, modeloVehiculo, estado);
 
                         }
                     }
@@ -1975,7 +2065,6 @@ namespace Proyectco_01_s2
                         break;
                 }
             }
-
             //programa
             MenuPrincipal();
         }
