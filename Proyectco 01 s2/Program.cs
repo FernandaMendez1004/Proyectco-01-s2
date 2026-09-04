@@ -248,8 +248,7 @@ namespace Proyectco_01_s2
             {
                 get { return direccionOrigen; }
                 set {
-                    if (Enum.IsDefined(typeof(lugares), value))
-                    { direccionOrigen = value; }
+                    direccionOrigen = value;
                 }
             }
 
@@ -259,8 +258,7 @@ namespace Proyectco_01_s2
             {
                 get { return direccionDestino; }
                 set {
-                    if (Enum.IsDefined(typeof(lugares), value))
-                    { direccionOrigen = value; }
+                     direccionDestino = value; 
                 }
             }
             private double costoPaquete;
@@ -293,6 +291,8 @@ namespace Proyectco_01_s2
                 Console.ResetColor();
 
                 Console.Write("Dirección de Destino: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(DireccionDestino);
+                Console.ResetColor();
+                Console.Write("Distancia aproximada: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(CalcularDistancia(OptenerCords(DireccionOrigen), OptenerCords(DireccionDestino)) + "Km");
                 Console.ResetColor();
             }
             public int OptenerCords(lugares place)
@@ -657,12 +657,24 @@ namespace Proyectco_01_s2
             public void CalcularTarifatotal()
             {
                 Movil.CalcularPrecio();
+                Encargo.CalcularTarifa();
 
                 //ver esto
-                Tarifa = Recargo - Descuento + movil.Costo;
+                Tarifa = Recargo - Descuento + movil.Costo + Encargo.CostoPaquete;
             }
 
-
+            public Pedido(Cliente propietario, Paquete paquete, Vehiculo movil, Repartidor repartidor, DateTime fecha, tipoServicio servicio, double descuento, double recargo, estadoPedido pedidoEstado)
+            {
+                Propietario = propietario;
+                Encargo = paquete;
+                Movil = movil;
+                Encargado = repartidor;
+                Fecha = fecha;
+                Servicio = servicio;
+                Descuento = descuento;
+                Recargo = recargo;
+                PedidoEstado = pedidoEstado;
+            }
 
         }
 
@@ -933,7 +945,7 @@ namespace Proyectco_01_s2
                 return true;
              }
 
-            bool ValidarPaquete(Paquete objeto, Cliente propietario, string descripcion, double peso, double valorDeclarado, Paquete.lugares origen, Paquete.lugares destino)
+            bool ValidarPaquete(Paquete objeto, Cliente propietario, string descripcion, double peso, double valorDeclarado)
             {
                 if (objeto.Propietario != propietario)
                 {
@@ -959,19 +971,6 @@ namespace Proyectco_01_s2
                     return false;
                 }
                 
-
-                if (objeto.DireccionOrigen != origen)
-                {
-                    MensajeError("La dirección de origen no es válida");
-                    return false;
-                }
-
-                if (objeto.DireccionDestino != destino)
-                {
-                    MensajeError("La dirección de destino no es válida");
-                    return false;
-                }
-
                 return true;
             }
 
@@ -1799,7 +1798,8 @@ namespace Proyectco_01_s2
                 string descripcion;
                 Paquete.lugares origen, destino;
                 double peso, valorDeclarado;
-                bool paqueteValido = false;
+                bool paqueteValido = true;
+                int opcionPaquete;
 
                 do
                 {
@@ -1818,12 +1818,12 @@ namespace Proyectco_01_s2
                         Console.ResetColor();
 
 
-                        if (!int.TryParse(Console.ReadLine(), out opcion))
+                        if (!int.TryParse(Console.ReadLine(), out opcionPaquete))
                         {
                             MensajeError("Ingrese una opción válida");
                             Pausa();
                         }
-                        else if (opcion < 1 || opcion > 4)
+                        else if (opcionPaquete < 1 || opcionPaquete > 4)
                         {
                             MensajeError("La opción seleccionada no existe");
                             Pausa();
@@ -1835,9 +1835,10 @@ namespace Proyectco_01_s2
                     } while (true);
 
 
-                    if (opcion == 4)
+                    if (opcionPaquete == 4)
                     {
                         MenuPaquete();
+                        return;
                     }
                     else
                     {
@@ -1941,7 +1942,7 @@ namespace Proyectco_01_s2
                             {
                                 MensajeError("Ingrese una opción numérica válida");
                             }
-                            else if (opcionLugar < 1 || opcionLugar > 5)
+                            else if (opcionLugar < 1 || opcionLugar > 6)
                             {
                                 MensajeError("La opción seleccionada no existe");
                             }
@@ -1952,6 +1953,7 @@ namespace Proyectco_01_s2
 
                         } while (true);
                         origen = (Paquete.lugares)(opcionLugar - 1);
+                        int lugardestino;
                         do
                         {
                            
@@ -1965,11 +1967,11 @@ namespace Proyectco_01_s2
                             Console.Write("Seleccione el lugar de destino: ");
                             Console.ResetColor();
 
-                            if (!int.TryParse(Console.ReadLine(), out opcionLugar))
+                            if (!int.TryParse(Console.ReadLine(), out lugardestino))
                             {
                                 MensajeError("Ingrese una opción numérica válida");
                             }
-                            else if (opcionLugar < 1 || opcionLugar > 5)
+                            else if (lugardestino < 1 || lugardestino > 6)
                             {
                                 MensajeError("La opción seleccionada no existe");
                             }
@@ -1979,16 +1981,16 @@ namespace Proyectco_01_s2
                             }
 
                         } while (true);
-                        destino = (Paquete.lugares)(opcionLugar - 1);
+                        destino = (Paquete.lugares)(lugardestino - 1);
 
                         if (nuevo == -1)
                         {
                             Paquete paquete;
-                            if (opcion == 1)
+                            if (opcionPaquete == 1)
                             {
                                 paquete = new Documento(GenerarID(), propietario, descripcion, peso, valorDeclarado, origen, destino);
                             }
-                            else if (opcion == 2)
+                            else if (opcionPaquete == 2)
                             {
                                 paquete = new Estandar(GenerarID(), propietario, descripcion, peso, valorDeclarado, origen, destino);
                             }
@@ -1998,13 +2000,15 @@ namespace Proyectco_01_s2
                             }
 
 
-                            paqueteValido = ValidarPaquete(paquete, propietario, descripcion, peso, valorDeclarado, origen, destino);
-                          
+                            paqueteValido = ValidarPaquete(paquete,propietario,descripcion,peso,valorDeclarado);
+
                             if (paqueteValido)
                             {
                                 paquetes.Add(paquete);
                                 MensajeExito("Paquete agregado correctamente.");
                             }
+                            Pausa();
+                            MenuPaquete();
                         }
                         else
                         {
@@ -2015,9 +2019,8 @@ namespace Proyectco_01_s2
                             paquetes[nuevo].DireccionOrigen = origen;
                             paquetes[nuevo].DireccionDestino = destino;
 
-                            paqueteValido = ValidarPaquete(paquetes[nuevo], propietario, descripcion, peso, valorDeclarado, origen, destino);
+                            paqueteValido = ValidarPaquete(paquetes[nuevo], propietario, descripcion, peso, valorDeclarado);
                         }
-                        Pausa();
                     }
                 } while (!paqueteValido);
             }
@@ -2055,8 +2058,6 @@ namespace Proyectco_01_s2
                 {
                     case 1:
                         MenuTipoPaquete(-1);
-                        Pausa();
-                        MenuPaquete();
                         break;
 
                     case 2:
@@ -2133,6 +2134,59 @@ namespace Proyectco_01_s2
                         MensajeError("La opción seleccionada no existe.");
                         Pausa();
                         MenuPaquete();
+                        break;
+                }
+            }
+            void MenuPedido()
+            {
+                do
+                {
+                    Titulo("MENÚ  PEDIDOS", ConsoleColor.DarkGreen);
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
+                    Console.WriteLine();
+                    OpcionMenu("1", "Crear solicitud", ConsoleColor.Green);
+                    OpcionMenu("2", "Actualizar estado", ConsoleColor.Green);
+                    OpcionMenu("3", "Consultar entregas", ConsoleColor.Green);
+                    OpcionMenu("4", "Cancelar entregas", ConsoleColor.Green);
+                    OpcionMenu("5", "Reprogramar entrega", ConsoleColor.Green);
+                    Console.WriteLine();
+                    OpcionMenu("6", "Regresar", ConsoleColor.DarkRed);
+                    Console.WriteLine();
+                    Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("Seleccione una opción: ");
+                    Console.ResetColor();
+
+                    if (!int.TryParse(Console.ReadLine(), out opcion))
+                    {
+                        MensajeError("Ingrese su opción utilizando números enteros.");
+                        Pausa();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (true);
+                switch (opcion)
+                {
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        MenuPrincipal();
+                        break;
+                    default:
+                        MensajeError("La opción seleccionada no existe.");
+                        Pausa();
+                        MenuPedido();
                         break;
                 }
             }
