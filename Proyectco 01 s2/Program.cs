@@ -482,7 +482,10 @@ namespace Proyectco_01_s2
 
             public virtual void CalcularPrecio()
             { }
-
+            public virtual string ObtenerTipoVehiculo()
+            {
+                return "";
+            }
             public Vehiculo(string placa, string marca, string modelo, double capacidadCarga, estadoVehiculo estado)
             {
                 Placa = placa;
@@ -511,6 +514,10 @@ namespace Proyectco_01_s2
                 Costo = 15;
 
             }
+            public override string ObtenerTipoVehiculo()
+            {
+                return "Bicicleta";
+            }
         }        
 
         class Motocicleta : Vehiculo
@@ -527,6 +534,10 @@ namespace Proyectco_01_s2
         }
         public override void CalcularPrecio()
             { Costo = 25; }
+            public override string ObtenerTipoVehiculo()
+            {
+                return "Motocicleta";
+            }
         }
 
         class Automovil : Vehiculo
@@ -543,9 +554,21 @@ namespace Proyectco_01_s2
         }
         public override void CalcularPrecio()
             { Costo = 30; }
+            public override string ObtenerTipoVehiculo()
+            {
+                return "Automovil";
+            }
         }
         class Pedido
         {
+            private int codigo;
+
+            public int Codigo
+            {
+                get { return codigo; }
+                set { codigo = value; }
+            }
+
             private Cliente propietario;
 
             public Cliente Propietario
@@ -645,6 +668,7 @@ namespace Proyectco_01_s2
             }
             public void MostrarInformacion()
             {
+                Console.Write("Codigo del pedido: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Codigo); Console.ResetColor();
                 Console.Write("Propietario: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Propietario.Nombre); Console.ResetColor();
                 Console.Write("Paquete: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Encargo.Descripcion); Console.ResetColor();
                 Console.Write("Vehiculo: "); Console.ForegroundColor = ConsoleColor.Yellow; Console.WriteLine(Movil.Marca); Console.ResetColor();
@@ -663,8 +687,9 @@ namespace Proyectco_01_s2
                 Tarifa = Recargo - Descuento + movil.Costo + Encargo.CostoPaquete;
             }
 
-            public Pedido(Cliente propietario, Paquete paquete, Vehiculo movil, Repartidor repartidor, DateTime fecha, tipoServicio servicio, double descuento, double recargo, estadoPedido pedidoEstado)
+            public Pedido(int codigo,Cliente propietario, Paquete paquete, Vehiculo movil, Repartidor repartidor, DateTime fecha, tipoServicio servicio, double descuento, double recargo, estadoPedido pedidoEstado)
             {
+                Codigo = codigo;
                 Propietario = propietario;
                 Encargo = paquete;
                 Movil = movil;
@@ -691,6 +716,7 @@ namespace Proyectco_01_s2
             List<Repartidor> repartidores = new List<Repartidor>();
             List<Vehiculo> vehiculos = new List<Vehiculo>();
             List<Paquete> paquetes = new List<Paquete>();
+            List<Pedido>pedidos = new List<Pedido>();
 
             List<int> id = new List<int>();
             Random IDrand = new Random();
@@ -809,8 +835,15 @@ namespace Proyectco_01_s2
                         break;
 
                         case 5:
-                            MensajeError("Módulo en desarrollo.");
+                            if(clientes.Count == 0 || paquetes.Count == 0 || vehiculos.Count == 0 || repartidores.Count == 0)
+                            {
+                            MensajeError("Debes ingresar datos en clientes, paquetes, vehiculos y repartidores antes");
                             Pausa();
+                            MenuPrincipal();
+                        }
+                        else {
+                            MenuPedido();
+                            }
                             break;
 
                         case 6:
@@ -886,7 +919,7 @@ namespace Proyectco_01_s2
             }
 
 
-            bool ValidarRepartidor(Repartidor objeto, string nombrer, string telefono, char tipoLicencia,  int entregas)
+            bool ValidarRepartidor(Repartidor objeto, string nombrer, string telefono, char tipoLicencia)
             {
                 if (objeto.Nombre != nombrer)
                 {
@@ -905,13 +938,7 @@ namespace Proyectco_01_s2
                     MensajeError("El tipo de licencia ingresado no es válido.");
                     return false;
                 }
-
-                if (objeto.CantidadEntregas != entregas)
-                {
-                    MensajeError("La cantidad de entregas ingresada no es válida.");
-                    return false;
-                }
-
+                                
                 return true;
             }
 
@@ -1228,7 +1255,6 @@ namespace Proyectco_01_s2
             {
                 char licencia;
                 bool disponibilidad = true, repartidorValido; 
-                int entregas = 0;
                 double calificacionPromedio, calificacion = 0;
 
                 do
@@ -1337,25 +1363,10 @@ namespace Proyectco_01_s2
                             while (true);
                             //Agregar una forma de calcular el promedio, que se actualize solo
                             //Agregar validaciones
+                                                      
+                            Repartidor repartidor = new Repartidor(GenerarID(), nombre, numeroTelefono, licencia, disponibilidad,0, 0);
 
-                            do
-                            {
-                                Console.Write("Ingrese cantidad de entregas: ");
-
-                                if (int.TryParse(Console.ReadLine(), out entregas) && entregas >= 0)
-                                {
-                                    break;
-                                }
-
-                                MensajeError("Cantidad de entregas debe ser un número entero");
-
-                            } while (true);
-
-
-
-                            Repartidor repartidor = new Repartidor(GenerarID(), nombre, numeroTelefono, licencia, disponibilidad, entregas, 0);
-
-                            repartidorValido = ValidarRepartidor(repartidor, nombre, numeroTelefono, licencia, entregas);
+                            repartidorValido = ValidarRepartidor(repartidor, nombre, numeroTelefono, licencia);
 
                             if (repartidorValido)
                             {
@@ -1487,24 +1498,11 @@ namespace Proyectco_01_s2
                                 //Agregar una forma de calcular el promedio, que se actualize solo
                                 //Agregar validaciones
 
-                                do
-                                {
-                                    Console.Write("Ingrese la nueva cantidad de entregas: ");
-
-                                    if (int.TryParse(Console.ReadLine(), out entregas) && entregas >= 0)
-                                    {
-                                        break;
-                                    }
-
-                                    MensajeError("Cantidad de entregas debe ser un número entero");
-
-                                } while (true);
-
                                 repartidores[posicion].Nombre = nombre;
                                 repartidores[posicion].NumeroTelefono = numeroTelefono;
                                 repartidores[posicion].TipoLicencia = licencia;
 
-                                repartidorValido = ValidarRepartidor(repartidores[posicion], nombre, numeroTelefono, licencia, entregas);
+                                repartidorValido = ValidarRepartidor(repartidores[posicion], nombre, numeroTelefono, licencia);
 
                             } while (!repartidorValido);
 
@@ -2139,6 +2137,7 @@ namespace Proyectco_01_s2
             }
             void MenuPedido()
             {
+                List<Vehiculo> vehiculosDisponibles = new List<Vehiculo>();
                 do
                 {
                     Titulo("MENÚ  PEDIDOS", ConsoleColor.DarkGreen);
@@ -2171,14 +2170,309 @@ namespace Proyectco_01_s2
                 switch (opcion)
                 {
                     case 1:
+                        vehiculosDisponibles.Clear();
+                        int codigoCliente, codigoPaquete, posicion, posicionPaquete, posicionRepartidor = -1, posicionVehiculo = -1;
+                        double descuento, recargo;
+                        Pedido.tipoServicio servicio;
+                        do
+                        {
+                            foreach (Cliente objeto in clientes)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+
+                            }
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("Seleccione el código del cliente: ");
+                            Console.ResetColor();
+                            if (!int.TryParse(Console.ReadLine(), out codigoCliente))
+                            {
+                                MensajeError("Ingrese un código válido.");
+                                Pausa();
+                            }
+                            else
+                            {
+                                posicion = clientes.FindIndex(p => p.Codigo == codigoCliente);
+                                if(posicion == -1)
+                                {
+                                    MensajeError("No existe un cliente con ese codigo");
+                                    Pausa();
+                                }else { break; }
+                                
+                            }
+                        } while (true);
+                        do
+                        {
+                            foreach (Paquete paquete in paquetes)
+                            {
+                                if (paquete.Propietario == clientes[posicion])
+                                {
+                                    paquete.MostrarInformacion();
+                                    Console.WriteLine();
+                                }
+                            }
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("Seleccione el código del paquete: ");
+                            Console.ResetColor();
+                            if (!int.TryParse(Console.ReadLine(), out codigoPaquete))
+                            {
+                                MensajeError("Ingrese un código válido.");
+                                Pausa();
+                            }
+                            else
+                            {
+                                posicionPaquete = paquetes.FindIndex(p => p.Codigo == codigoPaquete && p.Propietario == clientes[posicion]);
+                                if (posicionPaquete == -1)
+                                {
+                                    MensajeError("No existe un paquete con ese codigo");
+                                    Pausa();
+                                }
+                                else { break; }
+
+                            }
+                        } while (true);
+                        foreach (Vehiculo vehicloDisponible in vehiculos)
+                        {
+                            if(vehicloDisponible.Estado == Vehiculo.estadoVehiculo.Disponible && vehicloDisponible.CapacidadCarga >= paquetes[posicionPaquete].Peso)
+                            {
+                                vehiculosDisponibles.Add(vehicloDisponible);
+                            }
+                        }
+                        if (vehiculosDisponibles.Count == 0)
+                        {
+                            MensajeError("No hay vehiculos disponibles ni capaces para realizar el pedido");
+                            Pausa() ;
+                            break;
+                        }
+                        foreach(Vehiculo vehiculoDisp in vehiculosDisponibles)
+                        {
+                            if(vehiculoDisp.ObtenerTipoVehiculo() == "Bicicleta")
+                            {
+                                foreach(Repartidor repartidorDisponible  in repartidores)
+                                {
+                                    if(repartidorDisponible.Disponibilidad == true)
+                                    {
+                                        posicionRepartidor = repartidores.IndexOf(repartidorDisponible);
+                                        break;
+                                    }
+                                }
+                            }else if(vehiculoDisp.ObtenerTipoVehiculo() == "Motocicleta")
+                            {
+                                foreach (Repartidor repartidorDisponible in repartidores)
+                                {
+                                    if (repartidorDisponible.Disponibilidad == true && repartidorDisponible.TipoLicencia == 'M')
+                                    {
+                                        posicionRepartidor = repartidores.IndexOf(repartidorDisponible);
+                                        break;
+                                    }
+                                }
+                            }
+                            else if (vehiculoDisp.ObtenerTipoVehiculo() == "Automovil")
+                            {
+                                foreach (Repartidor repartidorDisponible in repartidores)
+                                {
+                                    if (repartidorDisponible.Disponibilidad == true && repartidorDisponible.TipoLicencia != 'M' && repartidorDisponible.TipoLicencia != 'N')
+                                    {
+                                        posicionRepartidor = repartidores.IndexOf(repartidorDisponible);
+                                        break;
+                                    }
+                                }
+                            }
+                            if(posicionRepartidor != -1)
+                            {
+                                posicionVehiculo = vehiculosDisponibles.IndexOf(vehiculoDisp);
+                                break;
+                            }
+                        }
+                        if(posicionVehiculo == -1)
+                        {
+                            MensajeError("No hay repartidores disponibles para realizar la entrega");
+                            Pausa();
+                            break;
+                        }
+                        do
+                        {
+                            Console.Write("Ingrese el descuento para la entrega: ");
+                            if(!double.TryParse(Console.ReadLine(), out descuento))
+                            {
+                                MensajeError("Ingrese el descuento en numeros");
+                                Pausa();
+                            }else
+                            {
+                                if(descuento < 0 || descuento > 100)
+                                {
+                                    MensajeError("El descuento no puede ser negativo ni mayor a 100");
+                                    Pausa();
+                                }else { break; }
+                            }
+                        } while (true);
+                        do
+                        {
+                            Console.Write("Ingrese el recargo para la entrega: ");
+                            if (!double.TryParse(Console.ReadLine(), out recargo))
+                            {
+                                MensajeError("Ingrese el recargo en numeros");
+                                Pausa();
+                            }
+                            else
+                            {
+                                if (recargo < 0 || recargo > 150)
+                                {
+                                    MensajeError("El recargo no puede ser negativo ni mayor a 150");
+                                    Pausa();
+                                }
+                                else { break; }
+                            }
+                        } while (true);
+                        int opcionServicio;
+                        do
+                        {
+
+                            OpcionMenu("1", "Urgente", ConsoleColor.Cyan);
+                            OpcionMenu("2", "Prioritario", ConsoleColor.Cyan);
+                            OpcionMenu("3", "Normal", ConsoleColor.Cyan);
+                            Console.Write("Seleccione el tipo de entrega: ");
+                            Console.ResetColor();
+
+                            if (!int.TryParse(Console.ReadLine(), out opcionServicio))
+                            {
+                                MensajeError("Ingrese una opción numérica válida");
+                            }
+                            else if (opcionServicio < 1 || opcionServicio > 3)
+                            {
+                                MensajeError("La opción seleccionada no existe");
+                            }
+                            else
+                            {
+                                break;
+                            }
+
+                        } while (true);
+                        servicio = (Pedido.tipoServicio)(opcionServicio - 1);
+                        DateTime hoy = DateTime.Today;
+                        Pedido pedido = new Pedido(GenerarID(),clientes[posicion], paquetes[posicionPaquete], vehiculosDisponibles[posicionVehiculo], repartidores[posicionRepartidor], hoy, servicio, descuento, recargo, Pedido.estadoPedido.Bodega);
+                        pedido.CalcularTarifatotal();
+                        pedidos.Add(pedido);
+                        MensajeExito("Pedido guardado correctamente");
+                        vehiculosDisponibles[posicionVehiculo].Estado = Vehiculo.estadoVehiculo.Asignado;
+                        repartidores[posicionRepartidor].Disponibilidad = false;
+                        
+                        Pausa();
+                        MenuPedido();
                         break;
                     case 2:
+                        int codigo, posicionPedido;
+                        if(pedidos.Count == 0)
+                        {
+                            MensajeError("No se han realizado pedidos");
+                        }else
+                        {
+                            string respuesta;
+                            do
+                            {
+                                foreach (Pedido objeto in pedidos)
+                                {
+                                    if(objeto.PedidoEstado != Pedido.estadoPedido.Entregado)
+                                    {
+                                        objeto.MostrarInformacion();
+                                        Console.WriteLine();
+                                    }
+                                }
+                                Console.Write("Deceas modificar el estado del pedido? s/n: ");
+                                respuesta = Console.ReadLine();
+                                respuesta = respuesta.ToLower();
+                                if (respuesta != "s" && respuesta != "n")
+                                {
+                                    MensajeError("Ingresar unicamente 's' o 'n'");
+                                }else if (string.IsNullOrEmpty(respuesta))
+                                {
+                                    MensajeError("La respuesta no puede estar vacía");
+                                }
+                                else { break; }
+                            } while (true);
+                            if(respuesta == "s")
+                            {
+                                do
+                                {
+                                    foreach (Pedido objeto in pedidos)
+                                    {
+                                        if (objeto.PedidoEstado != Pedido.estadoPedido.Entregado)
+                                        {
+                                            objeto.MostrarInformacion();
+                                            Console.WriteLine();
+                                        }
+                                    }
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.Write("Seleccione el código del pedido: ");
+                                    Console.ResetColor();
+                                    if (!int.TryParse(Console.ReadLine(), out codigo))
+                                    {
+                                        MensajeError("Ingrese un código válido.");
+                                        Pausa();
+                                    }
+                                    else
+                                    {
+                                        posicionPedido = pedidos.FindIndex(p => p.Codigo == codigo && p.PedidoEstado != Pedido.estadoPedido.Entregado);
+                                        if (posicionPedido == -1)
+                                        {
+                                            MensajeError("No existe un pedido con ese codigo");
+                                            Pausa();
+                                        }
+                                        else { break; }
+
+                                    }
+                                } while (true);
+                                if (pedidos[posicionPedido].PedidoEstado == Pedido.estadoPedido.Bodega)
+                                {
+                                    pedidos[posicionPedido].PedidoEstado = Pedido.estadoPedido.Camino;
+                                    MensajeExito("Pedido actualizado a 'en camino'");
+                                }
+                                else
+                                {
+                                    pedidos[posicionPedido].PedidoEstado = Pedido.estadoPedido.Entregado;
+                                    pedidos[posicionPedido].Movil.Estado = Vehiculo.estadoVehiculo.Disponible;
+                                    pedidos[posicionPedido].Encargado.Disponibilidad = true;
+                                    pedidos[posicionPedido].Encargado.CantidadEntregas += 1;
+                                    MensajeExito("Pedido actualizado a 'entregado'");
+                                }
+
+                            }
+                        }
+                            
+                        Pausa();
+                        MenuPedido();
                         break;
                     case 3:
+                        Titulo("Lista de entregas pendientes", ConsoleColor.DarkBlue);
+                        Console.WriteLine();
+                        Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
+                        Console.WriteLine();
+                        foreach (Pedido objeto in pedidos)
+                        {
+                            if (objeto.PedidoEstado != Pedido.estadoPedido.Entregado)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                        }
+                        Titulo("Lista de entregas completadas", ConsoleColor.DarkGreen);
+                        Console.WriteLine();
+                        Console.WriteLine("────────────────────────────────────────────────────────────────────────────────────────────────────");
+                        Console.WriteLine();
+                        foreach (Pedido objeto in pedidos)
+                        {
+                            if (objeto.PedidoEstado == Pedido.estadoPedido.Entregado)
+                            {
+                                objeto.MostrarInformacion();
+                                Console.WriteLine();
+                            }
+                        }
                         break;
                     case 4:
+                        //luego lo hago, estoy cansado
                         break;
                     case 5:
+                        //luego lo hago, estoy cansado
                         break;
                     case 6:
                         MenuPrincipal();
